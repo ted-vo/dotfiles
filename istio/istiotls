@@ -1,0 +1,250 @@
+#! /usr/bin/env sh
+package="istiotls"
+ROOT=$(pwd)
+
+handle_error() {
+  echo ""
+  echo "Error: $1"
+  echo "Run 'istiotls $2 --help' for usage."
+
+  clean_up
+  exit 1
+}
+
+clean_up() {
+  cd $ROOT
+}
+
+global_help() {
+  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo ""
+  echo "Usage:"
+  echo "istiotls [command]"
+  echo " "
+  echo "Available Commands:"
+  echo "  root                     Create a root certificate and private key to sign the certificates for your services"
+  echo "  servioce                 Create a certificate and a private key for service"
+  exit 0
+}
+
+root_help() {
+  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo ""
+  echo "Usage:"
+  echo "istiotls root"
+  echo " "
+  echo "Available Commands:"
+  echo ""
+  echo "Flags:"
+  echo "  -h, --help               show brief help"
+  echo "  -d.                      domain"
+  echo "  -o, --dir-cert           output directory"
+  exit 0
+}
+
+service_help() {
+  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo ""
+  echo "Usage:"
+  echo "istiotls service"
+  echo " "
+  echo "Available Commands:"
+  echo ""
+  echo "Flags:"
+  echo "  -h, --help               show brief help"
+  echo "  -d                       domain"
+  echo "  -ca                      input CA crt"
+  echo "  -ca-key                  input CA Key"
+  echo "  -o, --dir-cert           output directory"
+  exit 0
+}
+
+root() {
+  if [ -z "$DOMAIN" ]; then
+    handle_error "missing domain" "$PROCESS"
+  fi
+
+  if [ -z "$OUTPUT" ]; then
+    OUTPUT=$ROOT
+    echo "[istiotls] No output. Using default: $OUTPUT"
+  else 
+    if [[ ! -e $OUTPUT ]]; then
+      mkdir -p $OUTPUT
+    fi
+  fi
+
+  export NAME="$(echo $DOMAIN | awk -F "." '{print $1}') Inc."
+  export DOMAIN_KEY=$DOMAIN.key
+  export DOMAIN_CRT=$DOMAIN.crt
+  export SUBJECT="/O=$NAME /CN=$DOMAIN"
+
+  echo "[istiotls] Name: $NAME"
+  echo "[istiotls] Domain: $DOMAIN"
+  echo "[istiotls] Subject: $SUBJECT"
+  echo "[istiotls] Create a root certificate and private key to sign the certificates for your services"
+  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CRT -subj "$SUBJECT"
+}
+
+service() {
+  if [ -z "$SERVICE_DOMAIN" ]; then
+    handle_error "missing service domain" "$PROCESS"
+  fi
+
+  if [ -z "$SERVICE_DOMAIN" ]; then
+    handle_error "missing service domain" "$PROCESS"
+  fi
+
+  if [ -z "$OUTPUT" ]; then
+    OUTPUT=$ROOT
+    echo "[istiotls] No output. Using default: $OUTPUT"
+  else 
+    if [[ ! -e $OUTPUT ]]; then
+      mkdir -p $OUTPUT
+    fi
+  fi
+
+  if [ -z "$CA" ]; then
+    handle_error "missing ca root domain" "$PROCESS"
+  fi
+
+  if [ -z "$CA_KEY" ]; then
+    handle_error "missing ca key root domain" "$PROCESS"
+  fi
+
+  export NAME="$(echo $SERVICE_DOMAIN | awk -F "." '{print $1}') Inc."
+  export SERVICE_KEY=$SERVICE_DOMAIN.key
+  export SERVICE_CSR=$SERVICE_DOMAIN.csr
+  export SERVICE_CRT=$SERVICE_DOMAIN.crt
+  export SUBJECT="/O=$NAME /CN=$SERVICE_DOMAIN"
+
+  echo "[istiotls] Service Name: $SERVICE"
+  echo "[istiotls] Create a certificate and a private key"
+  openssl req -nodes -newkey rsa:2048 -keyout $OUTPUT/$SERVICE_KEY -out $OUTPUT/$SERVICE_CSR -subj "$SUBJECT"
+  openssl x509 -req -sha256 -days 365 -CA $CA -CAkey $CA_KEY -set_serial 0 -in $OUTPUT/$SERVICE_CSR -out $OUTPUT/$SERVICE_CRT
+}
+
+while test $# -gt 0; do
+  case "$1" in
+    -h|--help)
+      global_help ;;
+    root)
+      shift
+      export PROCESS="root"
+      while test $# -gt 0; do
+        case "$1" in
+          -h|--help)
+            root_help ;;
+          -d)
+            shift
+            if test $# -gt 0; then
+              export DOMAIN=$1
+            else
+              echo "[istiotls] flag -d :: DOMAIN no input name specified."
+              exit 1
+            fi  
+            shift
+            ;;
+          # -s)
+          #   shift
+          #   if test $# -gt 0; then
+          #     export SECRET=$1
+          #   else
+          #     echo "[istiotls] flag -s :: SECRET no input name specified."
+          #     exit 1
+          #   fi  
+          #   shift
+          #   ;;
+          -o)
+            shift
+            if test $# -gt 0; then
+              export OUTPUT=$1
+            else
+              echo "[istiotls] no output dir specified"
+              exit 1
+            fi
+            shift
+            ;;
+          *)
+            handle_error "unknown flag \"$1\" for \"istiotls root\"" "root"
+            exit 1
+            break
+            ;;
+        esac
+      done
+      shift
+      ;;
+    service)
+      shift
+      export PROCESS="service"
+      while test $# -gt 0; do
+        case "$1" in
+          -h|--help)
+            service_help ;;
+          -d)
+            shift
+            if test $# -gt 0; then
+              export SERVICE_DOMAIN=$1
+            else
+              echo "[istiotls] flag -d :: SERVICE_NAME no input name specified."
+              exit 1
+            fi  
+            shift
+            ;;
+          -ca)
+            shift
+            if test $# -gt 0; then
+              export CA=$1
+            else
+              echo "[istiotls] flag -ca :: CA no input name specified."
+              exit 1
+            fi 
+            shift
+            ;;
+          -ca-key)
+            shift
+            if test $# -gt 0; then
+              export CA_KEY=$1
+            else
+              echo "[istiotls] flag -ca-key :: CA_KEY no input name specified."
+              exit 1
+            fi
+            shift
+            ;;
+          -o)
+            shift
+            if test $# -gt 0; then
+              export OUTPUT=$1
+            else
+              echo "[istiotls] flag -o :: no output dir specified"
+              exit 1
+            fi
+            shift
+            ;;
+          *)
+            handle_error "unknown flag \"$1\" for \"istiotls root\"" "service"
+            exit 1
+            break
+            ;;
+        esac
+      done
+      shift
+      ;;
+    *)
+      handle_error "unknown flag \"$1\" for \"istiotls\""
+      exit 1
+      break
+      ;;
+  esac
+done
+
+# if [ -z "$SECRET" ]; then
+#   handle_error "missing secret name"
+# fi
+
+if [ $PROCESS == "root" ]; then
+  root
+fi
+
+if [ $PROCESS == "service" ]; then
+  service
+fi
