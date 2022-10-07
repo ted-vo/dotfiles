@@ -16,7 +16,7 @@ clean_up() {
 }
 
 global_help() {
-  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo "Shell script for generate certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen [command]"
@@ -28,7 +28,7 @@ global_help() {
 }
 
 root_help() {
-  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo "Shell script for generate certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen root"
@@ -43,7 +43,7 @@ root_help() {
 }
 
 service_help() {
-  echo "Shell script for generate certificates and key Istio SSL/TLS"
+  echo "Shell script for generate certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen service"
