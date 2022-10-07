@@ -1,11 +1,11 @@
 #! /usr/bin/env sh
-package="istiotls"
+package="cert-gen"
 ROOT=$(pwd)
 
 handle_error() {
   echo ""
   echo "Error: $1"
-  echo "Run 'istiotls $2 --help' for usage."
+  echo "Run 'cert-gen $2 --help' for usage."
 
   clean_up
   exit 1
@@ -19,7 +19,7 @@ global_help() {
   echo "Shell script for generate certificates and key Istio SSL/TLS"
   echo ""
   echo "Usage:"
-  echo "istiotls [command]"
+  echo "cert-gen [command]"
   echo " "
   echo "Available Commands:"
   echo "  root                     Create a root certificate and private key to sign the certificates for your services"
@@ -31,13 +31,13 @@ root_help() {
   echo "Shell script for generate certificates and key Istio SSL/TLS"
   echo ""
   echo "Usage:"
-  echo "istiotls root"
+  echo "cert-gen root"
   echo " "
   echo "Available Commands:"
   echo ""
   echo "Flags:"
   echo "  -h, --help               show brief help"
-  echo "  -d.                      domain"
+  echo "  -d.                      domain. ex: domain.com"
   echo "  -o, --dir-cert           output directory"
   exit 0
 }
@@ -46,13 +46,13 @@ service_help() {
   echo "Shell script for generate certificates and key Istio SSL/TLS"
   echo ""
   echo "Usage:"
-  echo "istiotls service"
+  echo "cert-gen service"
   echo " "
   echo "Available Commands:"
   echo ""
   echo "Flags:"
   echo "  -h, --help               show brief help"
-  echo "  -d                       domain"
+  echo "  -d                       domain. ex: sub.domain.com"
   echo "  -ca                      input CA crt"
   echo "  -ca-key                  input CA Key"
   echo "  -o, --dir-cert           output directory"
@@ -66,7 +66,7 @@ root() {
 
   if [ -z "$OUTPUT" ]; then
     OUTPUT=$ROOT
-    echo "[istiotls] No output. Using default: $OUTPUT"
+    echo "[cert-gen] No output. Using default: $OUTPUT"
   else 
     if [[ ! -e $OUTPUT ]]; then
       mkdir -p $OUTPUT
@@ -78,10 +78,10 @@ root() {
   export DOMAIN_CRT=$DOMAIN.crt
   export SUBJECT="/O=$NAME /CN=$DOMAIN"
 
-  echo "[istiotls] Name: $NAME"
-  echo "[istiotls] Domain: $DOMAIN"
-  echo "[istiotls] Subject: $SUBJECT"
-  echo "[istiotls] Create a root certificate and private key to sign the certificates for your services"
+  echo "[cert-gen] Name: $NAME"
+  echo "[cert-gen] Domain: $DOMAIN"
+  echo "[cert-gen] Subject: $SUBJECT"
+  echo "[cert-gen] Create a root certificate and private key to sign the certificates for your services"
   openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CRT -subj "$SUBJECT"
 }
 
@@ -96,7 +96,7 @@ service() {
 
   if [ -z "$OUTPUT" ]; then
     OUTPUT=$ROOT
-    echo "[istiotls] No output. Using default: $OUTPUT"
+    echo "[cert-gen] No output. Using default: $OUTPUT"
   else 
     if [[ ! -e $OUTPUT ]]; then
       mkdir -p $OUTPUT
@@ -117,8 +117,8 @@ service() {
   export SERVICE_CRT=$SERVICE_DOMAIN.crt
   export SUBJECT="/O=$NAME /CN=$SERVICE_DOMAIN"
 
-  echo "[istiotls] Service Name: $SERVICE"
-  echo "[istiotls] Create a certificate and a private key"
+  echo "[cert-gen] Service Name: $SERVICE"
+  echo "[cert-gen] Create a certificate and a private key"
   openssl req -nodes -newkey rsa:2048 -keyout $OUTPUT/$SERVICE_KEY -out $OUTPUT/$SERVICE_CSR -subj "$SUBJECT"
   openssl x509 -req -sha256 -days 365 -CA $CA -CAkey $CA_KEY -set_serial 0 -in $OUTPUT/$SERVICE_CSR -out $OUTPUT/$SERVICE_CRT
 }
@@ -139,7 +139,7 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export DOMAIN=$1
             else
-              echo "[istiotls] flag -d :: DOMAIN no input name specified."
+              echo "[cert-gen] flag -d :: DOMAIN no input name specified."
               exit 1
             fi  
             shift
@@ -149,7 +149,7 @@ while test $# -gt 0; do
           #   if test $# -gt 0; then
           #     export SECRET=$1
           #   else
-          #     echo "[istiotls] flag -s :: SECRET no input name specified."
+          #     echo "[cert-gen] flag -s :: SECRET no input name specified."
           #     exit 1
           #   fi  
           #   shift
@@ -159,13 +159,13 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export OUTPUT=$1
             else
-              echo "[istiotls] no output dir specified"
+              echo "[cert-gen] no output dir specified"
               exit 1
             fi
             shift
             ;;
           *)
-            handle_error "unknown flag \"$1\" for \"istiotls root\"" "root"
+            handle_error "unknown flag \"$1\" for \"cert-gen root\"" "root"
             exit 1
             break
             ;;
@@ -185,7 +185,7 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export SERVICE_DOMAIN=$1
             else
-              echo "[istiotls] flag -d :: SERVICE_NAME no input name specified."
+              echo "[cert-gen] flag -d :: SERVICE_NAME no input name specified."
               exit 1
             fi  
             shift
@@ -195,7 +195,7 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export CA=$1
             else
-              echo "[istiotls] flag -ca :: CA no input name specified."
+              echo "[cert-gen] flag -ca :: CA no input name specified."
               exit 1
             fi 
             shift
@@ -205,7 +205,7 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export CA_KEY=$1
             else
-              echo "[istiotls] flag -ca-key :: CA_KEY no input name specified."
+              echo "[cert-gen] flag -ca-key :: CA_KEY no input name specified."
               exit 1
             fi
             shift
@@ -215,13 +215,13 @@ while test $# -gt 0; do
             if test $# -gt 0; then
               export OUTPUT=$1
             else
-              echo "[istiotls] flag -o :: no output dir specified"
+              echo "[cert-gen] flag -o :: no output dir specified"
               exit 1
             fi
             shift
             ;;
           *)
-            handle_error "unknown flag \"$1\" for \"istiotls root\"" "service"
+            handle_error "unknown flag \"$1\" for \"cert-gen root\"" "service"
             exit 1
             break
             ;;
@@ -230,7 +230,7 @@ while test $# -gt 0; do
       shift
       ;;
     *)
-      handle_error "unknown flag \"$1\" for \"istiotls\""
+      handle_error "unknown flag \"$1\" for \"cert-gen\""
       exit 1
       break
       ;;
