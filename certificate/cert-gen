@@ -16,19 +16,19 @@ clean_up() {
 }
 
 global_help() {
-  echo "Shell script for generate certificates and key SSL/TLS"
+  echo "Shell script for generation certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen [command]"
   echo " "
   echo "Available Commands:"
-  echo "  root                     Create a root certificate and private key to sign the certificates for your services"
-  echo "  servioce                 Create a certificate and a private key for service"
+  echo "  root                    create a root certificate and private key to sign the certificates for your services"
+  echo "  service                 create a certificate and a private key for service"
   exit 0
 }
 
 root_help() {
-  echo "Shell script for generate certificates and key SSL/TLS"
+  echo "Shell script for generation certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen root"
@@ -37,13 +37,13 @@ root_help() {
   echo ""
   echo "Flags:"
   echo "  -h, --help               show brief help"
-  echo "  -d.                      domain. ex: domain.com"
+  echo "  -n, --company-name       company name"
   echo "  -o, --dir-cert           output directory"
   exit 0
 }
 
 service_help() {
-  echo "Shell script for generate certificates and key SSL/TLS"
+  echo "Shell script for signing certificates and key SSL/TLS"
   echo ""
   echo "Usage:"
   echo "cert-gen service"
@@ -52,7 +52,7 @@ service_help() {
   echo ""
   echo "Flags:"
   echo "  -h, --help               show brief help"
-  echo "  -d                       domain. ex: sub.domain.com"
+  echo "  -d, --domain             domain. ex: domain.com or sub.domain.com"
   echo "  -ca                      input CA crt"
   echo "  -ca-key                  input CA Key"
   echo "  -o, --dir-cert           output directory"
@@ -60,8 +60,8 @@ service_help() {
 }
 
 root() {
-  if [ -z "$DOMAIN" ]; then
-    handle_error "missing domain" "$PROCESS"
+  if [ -z "$NAME" ]; then
+    handle_error "missing company name" "$PROCESS"
   fi
 
   if [ -z "$OUTPUT" ]; then
@@ -73,25 +73,33 @@ root() {
     fi
   fi
 
-  export NAME="$(echo $DOMAIN | awk -F "." '{print $1}') Inc."
-  export DOMAIN_KEY=$DOMAIN.key
-  export DOMAIN_CRT=$DOMAIN.crt
-  export SUBJECT="/O=$NAME /CN=$DOMAIN"
+  CA_KEY=$NAME-ca.key
+  CA_CRT=$NAME-ca.crt
+  SUBJECT="/O=$NAME"
 
   echo "[cert-gen] Name: $NAME"
-  echo "[cert-gen] Domain: $DOMAIN"
   echo "[cert-gen] Subject: $SUBJECT"
   echo "[cert-gen] Create a root certificate and private key to sign the certificates for your services"
-  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CRT -subj "$SUBJECT"
+  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout $OUTPUT/$CA_KEY -out $OUTPUT/$CA_CRT -subj "$SUBJECT"
+
+  echo "[cert-gen] Printing root CA certificate"
+  openssl x509 -in $CA_CRT -noout -text
+
+  echo ""
+  echo ""
+  echo "********************************************************************************************"
+  echo "************************************ WARNING ***********************************************"
+  echo "********************************************************************************************"
+  echo "--> Keep $CA_KEY and $CA_CRT secure, but available for generating end entities in the future *"
 }
 
 service() {
-  if [ -z "$SERVICE_DOMAIN" ]; then
-    handle_error "missing service domain" "$PROCESS"
+  if [ -z "$DOMAIN" ]; then
+    handle_error "missing domain" "$PROCESS"
   fi
 
-  if [ -z "$SERVICE_DOMAIN" ]; then
-    handle_error "missing service domain" "$PROCESS"
+  if [ -z "$DOMAIN" ]; then
+    handle_error "missing domain" "$PROCESS"
   fi
 
   if [ -z "$OUTPUT" ]; then
@@ -111,16 +119,25 @@ service() {
     handle_error "missing ca key root domain" "$PROCESS"
   fi
 
-  export NAME="$(echo $SERVICE_DOMAIN | awk -F "." '{print $1}') Inc."
-  export SERVICE_KEY=$SERVICE_DOMAIN.key
-  export SERVICE_CSR=$SERVICE_DOMAIN.csr
-  export SERVICE_CRT=$SERVICE_DOMAIN.crt
-  export SUBJECT="/O=$NAME /CN=$SERVICE_DOMAIN"
+  NAME="$(echo $DOMAIN | awk -F "." '{print $1}'), Inc."
+  DOMAIN_KEY=$DOMAIN.key
+  DOMAIN_CSR=$DOMAIN.csr
+  DOMAIN_CRT=$DOMAIN.crt
+  SUBJECT="/O=$NAME /CN=$DOMAIN"
 
-  echo "[cert-gen] Service Name: $SERVICE"
+  echo "[cert-gen] Service Name: $DOMAIN"
   echo "[cert-gen] Create a certificate and a private key"
-  openssl req -nodes -newkey rsa:2048 -keyout $OUTPUT/$SERVICE_KEY -out $OUTPUT/$SERVICE_CSR -subj "$SUBJECT"
-  openssl x509 -req -sha256 -days 365 -CA $CA -CAkey $CA_KEY -set_serial 0 -in $OUTPUT/$SERVICE_CSR -out $OUTPUT/$SERVICE_CRT
+  openssl req -nodes -newkey rsa:4096 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CSR -subj "$SUBJECT"
+  echo "[cert-gen] Signing certificate"
+  openssl x509 -req -sha256 -days 365 -CA $CA -CAkey $CA_KEY -set_serial 0 -in $OUTPUT/$DOMAIN_CSR -out $OUTPUT/$DOMAIN_CRT
+  echo "[cert-gen] Printing signed certificate"
+  openssl x509 -in $DOMAIN_CRT -noout -text
+  echo ""
+  echo ""
+  echo "********************************************************************************************"
+  echo "************************************ WARNING ***********************************************"
+  echo "********************************************************************************************"
+  echo "--> Keep these files secure: $DOMAIN_KEY, $DOMAIN_CRT, $DOMAIN_CSR"
 }
 
 while test $# -gt 0; do
@@ -129,17 +146,17 @@ while test $# -gt 0; do
       global_help ;;
     root)
       shift
-      export PROCESS="root"
+      PROCESS="root"
       while test $# -gt 0; do
         case "$1" in
           -h|--help)
             root_help ;;
-          -d)
+          -n|--company-name)
             shift
             if test $# -gt 0; then
-              export DOMAIN=$1
+              NAME=$1
             else
-              echo "[cert-gen] flag -d :: DOMAIN no input name specified."
+              echo "[cert-gen] flag -n :: NAME no input name specified."
               exit 1
             fi  
             shift
@@ -157,7 +174,7 @@ while test $# -gt 0; do
           -o)
             shift
             if test $# -gt 0; then
-              export OUTPUT=$1
+              OUTPUT=$1
             else
               echo "[cert-gen] no output dir specified"
               exit 1
@@ -175,15 +192,15 @@ while test $# -gt 0; do
       ;;
     service)
       shift
-      export PROCESS="service"
+      PROCESS="service"
       while test $# -gt 0; do
         case "$1" in
           -h|--help)
             service_help ;;
-          -d)
+          -d|--domain)
             shift
             if test $# -gt 0; then
-              export SERVICE_DOMAIN=$1
+              DOMAIN=$1
             else
               echo "[cert-gen] flag -d :: SERVICE_NAME no input name specified."
               exit 1
