@@ -65,15 +65,16 @@ connect_database() {
 }
 
 selection_mode() {
+  PROJECT_ID=$(gcloud config get-value project)
   echo ""
   echo "-----------------------------------------------------------"
-  echo " Current GCP Project-Id: $(gcloud config get-value project &> /dev/null)"
+  echo " Current GCP Project-Id: $PROJECT_ID"
   echo "-----------------------------------------------------------"
   echo " List SQL Instances"
   gcloud sql instances list
   echo "-----------------------------------------------------------"
 
-  read -p "Enter instance connection name (projectID:region:instanceID): " CONNECTION_NAME
+  read -p "Enter instance connection name (projectID:region:instanceID|instannceName): " CONNECTION_NAME
   connect_database $CONNECTION_NAME
 }
 
