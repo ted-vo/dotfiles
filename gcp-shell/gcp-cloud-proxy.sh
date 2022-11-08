@@ -19,6 +19,7 @@ global_help() {
   echo "Flags:"
   echo "  -h, --help                show brief help"
   echo "  -c, --connection-name     projectID:region:instanceID"
+  echo "  -p, --port                port local for forwarding"
   exit 0
 }
 
@@ -55,13 +56,17 @@ require_shell() {
 connect_database() {
   require_shell
 
+  # check port or assign default: 3306
+  if [[ -z "$PORT" ]]; then
+    PORT=3306
+  fi
   echo ""
   echo "-----------------------------------------------------------"
   echo " Running with `cloud_sql_proxy -version`"
   echo " Host: localhost"
-  echo " Port: 3306"
+  echo " Port: $PORT"
   echo "-----------------------------------------------------------"
-  cloud_sql_proxy -instances=$1=tcp:3306 "-ip_address_types=PRIVATE"
+  cloud_sql_proxy -instances=$1=tcp:$PORT "-ip_address_types=PRIVATE"
 }
 
 selection_mode() {
@@ -85,6 +90,11 @@ while test $# -gt 0; do
     -c|--connection-name)
       shift
       CONNECTION_NAME=$1
+      shift
+      ;;
+    -p|--port)
+      shift
+      PORT=$1
       shift
       ;;
     *)
