@@ -12,7 +12,7 @@ global_help() {
   echo ""
   echo "Usage:"
   echo "gcp-cloud-proxy [flag] => flag for fast connect mode"
-  echo "gcp-cloud-proxy        => without flag for sellection mode"
+  echo "gcp-cloud-proxy        => without flag for selection mode"
   echo " "
   echo "Available Commands:"
   echo ""
