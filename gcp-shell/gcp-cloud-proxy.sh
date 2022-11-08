@@ -7,6 +7,7 @@ BIN_PATH=/usr/local/bin
 CLOUD_SQL_PROXY=$BIN_PATH/cloud_sql_proxy
 
 global_help() {
+  echo ""
   echo "Shell script for run SQL Auth proxy client" 
   echo ""
   echo "Usage:"
