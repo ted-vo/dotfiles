@@ -22,6 +22,7 @@ global_help() {
 }
 
 install_cloud_sql_proxy_client() {
+  echo ""
   echo " Downloading Cloud SQL Auth proxy client..."
   if [[ $OS_ARCH == "darwin" ]]; then
     curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
@@ -33,9 +34,26 @@ install_cloud_sql_proxy_client() {
   chmod +x $CLOUD_SQL_PROXY
 
   echo " Done"
+  echo ""
+}
+
+require_shell() {
+  if ! cloud_sql_proxy -version &> /dev/null; then
+  echo "\"cloud_sql_proxy\" cloud not be found."
+  while true; do
+    read -p "Do you wish to install this program? (Yy or Nn): " yn
+    case $yn in
+      [Yy]* ) install_cloud_sql_proxy_client; break;;
+      [Nn]* ) exit;;
+      * ) echo "Please answer yes or no.";;
+    esac
+  done
+ fi
 }
 
 connect_database() {
+  require_shell
+
   echo ""
   echo "-----------------------------------------------------------"
   echo " Running with `cloud_sql_proxy -version`"
@@ -48,7 +66,7 @@ connect_database() {
 selection_mode() {
   echo ""
   echo "-----------------------------------------------------------"
-  echo " Current GCP Project-Id: $(gcloud config get-value project)"
+  echo " Current GCP Project-Id: $(gcloud config get-value project &> /dev/null)"
   echo "-----------------------------------------------------------"
   echo " List SQL Instances"
   gcloud sql instances list
@@ -56,20 +74,7 @@ selection_mode() {
 
   read -p "Enter instance connection name (projectID:region:instanceID): " CONNECTION_NAME
   connect_database $CONNECTION_NAME
-
 }
-
-if ! cloud_sql_proxy -version $> /dev/null; then
-  echo "\"cloud_sql_proxy\" cloud not be found."
-  while true; do
-    read -p "Do you wish to install this program? (Yy or Nn): " yn
-    case $yn in
-      [Yy]* ) install_cloud_sql_proxy_client; break;;
-      [Nn]* ) exit;;
-      * ) echo "Please answer yes or no.";;
-    esac
-  done
-fi
 
 while test $# -gt 0; do
   case "$1" in
