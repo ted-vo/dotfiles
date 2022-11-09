@@ -26,9 +26,9 @@ global_help() {
 install_cloud_sql_proxy_client() {
   echo ""
   echo " Downloading Cloud SQL Auth proxy client..."
-  if [[ $OS_ARCH == "darwin" ]]; then
+  if [ $OS_ARCH == "darwin" ]; then
     curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
-  elif [[ $OS_ARCH == "linux" ]]; then
+  elif [ $OS_ARCH == "linux" ]; then
     wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O $CLOUD_SQL_PROXY
   fi
 
@@ -57,7 +57,7 @@ connect_database() {
   require_shell
 
   # check port or assign default: 3306
-  if [[ -z "$PORT" ]]; then
+  if [ -z "$PORT" ]; then
     PORT=3306
   fi
   echo ""
@@ -71,16 +71,18 @@ connect_database() {
 
 selection_mode() {
   PROJECT_ID=$(gcloud config get-value project)
+  REGION=$(gcloud config get-value compute/region)
   echo ""
   echo "-----------------------------------------------------------"
   echo " Current GCP Project-Id: $PROJECT_ID"
+  echo "             Region    : $REGION"
   echo "-----------------------------------------------------------"
   echo " List SQL Instances"
   gcloud sql instances list
   echo "-----------------------------------------------------------"
 
-  read -p "Enter instance connection name (projectID:region:instanceID|instannceName): " CONNECTION_NAME
-  connect_database $CONNECTION_NAME
+  read -p "Enter instance name ($PROJECT_ID:$REGION:YOUR_INPUT): " INSTANCE_NAME
+  connect_database $PROJECT_ID:$REGION:$INSTANCE_NAME
 }
 
 while test $# -gt 0; do
@@ -106,7 +108,7 @@ while test $# -gt 0; do
   esac
 done
 
-if [[ ! -z $CONNECTION_NAME ]]; then
+if [ ! -z $CONNECTION_NAME ]; then
   connect_database $CONNECTION_NAME
 else
   selection_mode
