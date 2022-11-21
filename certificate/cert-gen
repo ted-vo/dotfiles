@@ -80,7 +80,7 @@ root() {
   echo "[cert-gen] Name: $NAME"
   echo "[cert-gen] Subject: $SUBJECT"
   echo "[cert-gen] Create a root certificate and private key to sign the certificates for your services"
-  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout $OUTPUT/$CA_KEY -out $OUTPUT/$CA_CRT -subj "$SUBJECT"
+  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $OUTPUT/$CA_KEY -out $OUTPUT/$CA_CRT -subj "$SUBJECT"
 
   echo "[cert-gen] Printing root CA certificate"
   openssl x509 -in $CA_CRT -noout -text
@@ -127,7 +127,7 @@ service() {
 
   echo "[cert-gen] Service Name: $DOMAIN"
   echo "[cert-gen] Create a certificate and a private key"
-  openssl req -nodes -newkey rsa:4096 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CSR -subj "$SUBJECT"
+  openssl req -nodes -newkey rsa:2048 -keyout $OUTPUT/$DOMAIN_KEY -out $OUTPUT/$DOMAIN_CSR -subj "$SUBJECT"
   echo "[cert-gen] Signing certificate"
   openssl x509 -req -sha256 -days 365 -CA $CA -CAkey $CA_KEY -set_serial 0 -in $OUTPUT/$DOMAIN_CSR -out $OUTPUT/$DOMAIN_CRT
   echo "[cert-gen] Printing signed certificate"
