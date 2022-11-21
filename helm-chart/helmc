@@ -27,8 +27,8 @@ global_help() {
   echo "  publish     publish chart"
   echo ""
   echo "Flags:"
-  echo "  -h, --help                show brief help"
-  echo "  -v                        set the version on the chart to this semver version"
+  echo "  -h, --help                show brief help."
+  echo "  -v                        set the version on the chart to this semver version."
   exit 0
 }
 
@@ -38,11 +38,11 @@ build_help() {
   echo "Usage:"
   echo "helmc build [flags]"
   echo ""
-  echo "Available Commands:"
+  echo "Available Commands: None"
   echo ""
   echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in"
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir"
+  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input."
+  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current directory."
   exit 0
 }
 
@@ -52,14 +52,14 @@ publish_help() {
   echo "Usage:"
   echo "helmc publish [flags]"
   echo ""
-  echo "Available Commands:"
+  echo "Available Commands: None"
   echo ""
   echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in."
+  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input."
   echo "  -p                        specify a project id."
   echo "  -u                        username of publisher to gitlab registry.. What ever you want."
   echo "  -t                        token (access token) for gitlab registry. Must have permission write registry."
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir."
+  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current directory."
   exit 0
 }
 
