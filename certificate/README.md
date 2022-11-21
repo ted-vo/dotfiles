@@ -33,3 +33,17 @@
    "  -ca-key                  input CA Key"
    "  -o, --dir-cert           output directory"
 ```
+
+## Example
+
+You wanna create cert for mTLS in your infra or TLS cert for your domain.
+
+Your root: ABC Company
+Your domain: abc.com
+Your service: api.abc.com or xyz.abc.com
+
+Step 1: Create root
+
+```bash
+cert-gen root -n ABC Company
+```
