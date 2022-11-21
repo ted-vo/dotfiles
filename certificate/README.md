@@ -38,12 +38,24 @@
 
 You wanna create cert for mTLS in your infra or TLS cert for your domain.
 
-Your root: ABC Company
-Your domain: abc.com
-Your service: api.abc.com or xyz.abc.com
+Your root: `ABC Company`
+Your domain: `abc.com`
+Your service: `api.abc.com` or `xyz.abc.com`
 
-Step 1: Create root
+Required: Create root
 
 ```bash
 cert-gen root -n ABC Company
+```
+
+### Create cert for domain `abc.com` or `xyz.abc.com`
+
+```bash
+# with abc.crt and abc.key are result of cert-gen root
+./cert-gen service -d abc.com -ca abc.crt -ca-key abc.key
+```
+
+```bash
+# with abc.crt and abc.key are result of cert-gen root
+./cert-gen service -d xyz.abc.com -ca abc.crt -ca-key abc.key
 ```
