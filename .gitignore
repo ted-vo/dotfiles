@@ -1,0 +1,15 @@
+# macos 
+.DS_Store
+**/*/.DS_Store
+
+# cert
+*.crt
+*.csr
+*.key
+*.pem
+
+**/*/*.crt
+**/*/*.csr
+**/*/*.key
+**/*/*.pem
+
