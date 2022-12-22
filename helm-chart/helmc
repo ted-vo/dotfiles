@@ -27,8 +27,8 @@ global_help() {
   echo "  publish     publish chart"
   echo ""
   echo "Flags:"
-  echo "  -h, --help                show brief help."
-  echo "  -v                        set the version on the chart to this semver version."
+  echo "  -h, --help                show brief help"
+  echo "  -v                        set the version on the chart to this semver version"
   exit 0
 }
 
@@ -38,11 +38,11 @@ build_help() {
   echo "Usage:"
   echo "helmc build [flags]"
   echo ""
-  echo "Available Commands: None"
+  echo "Available Commands:"
   echo ""
   echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input."
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current directory."
+  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in"
+  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir"
   exit 0
 }
 
@@ -52,15 +52,32 @@ publish_help() {
   echo "Usage:"
   echo "helmc publish [flags]"
   echo ""
-  echo "Available Commands: None"
+  echo "Available Commands:"
   echo ""
   echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input."
+  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in."
   echo "  -p                        specify a project id."
   echo "  -u                        username of publisher to gitlab registry.. What ever you want."
   echo "  -t                        token (access token) for gitlab registry. Must have permission write registry."
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current directory."
+  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir."
   exit 0
+}
+
+parse_yaml {
+   local prefix=$2
+   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+   sed -ne "s|^\($s\):|\1|" \
+        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+   awk -F$fs '{
+      indent = length($1)/2;
+      vname[indent] = $2;
+      for (i in vname) {if (i > indent) {delete vname[i]}}
+      if (length($3) > 0) {
+         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+      }
+   }'
 }
 
 build_package() {
@@ -75,9 +92,9 @@ build_package() {
     echo "[$PROCESS] No output. Using default: $OUTPUT"
   fi
 
-  export CHART_VERSION=$(grep 'version:' $INPUT/Chart.yaml | tail -n1 | cut -c 10-)
+  eval $(parse_yaml $INPUT/Chart.yaml)
   if [ -z "$VERSION" ]; then
-    VERSION=$CHART_VERSION
+    VERSION=$version
   fi
 
   echo "[$PROCESS] Chart packaging..."
@@ -85,12 +102,11 @@ build_package() {
 }
 
 publish_package() {
-  export CHART_NAME=$(grep 'name:' $INPUT/Chart.yaml | tail -n1 | cut -c 7-)
-  echo "[$PROCESS] Name: $CHART_NAME"
+  eval $(parse_yaml $INPUT/Chart.yaml)
+  echo "[$PROCESS] Name: $name"
 
-  export CHART_VERSION=$(grep 'version:' $INPUT/Chart.yaml | tail -n1 | cut -c 10-)
   if [ -z "$VERSION" ]; then
-    VERSION=$CHART_VERSION
+    VERSION=$version
   fi
   echo "[$PROCESS] Version: $VERSION"
 
@@ -113,11 +129,11 @@ publish_package() {
   export URL=https://gitlab.com/api/v4/projects/$PROJECT_ID/packages/helm/api/stable/charts
   echo "[$PROCESS] Url: $URL"
 
-  export CHART_FILE_NAME="$CHART_NAME-$VERSION"
-  export CHART_FORM="chart=@$CHART_FILE_NAME.tgz"
+  local CHART_FILE_NAME="$name-$version"
+  local CHART_FORM="chart=@$CHART_FILE_NAME.tgz"
 
   mkdir .temp &> /dev/null
-  OUTPUT=.temp/
+  export OUTPUT=.temp/
 
   build_package
 
@@ -146,6 +162,7 @@ publish_package() {
       handle_error "error-code=$RESPONSE" "publish"
     fi
   fi
+
   clean_up
 }
 
