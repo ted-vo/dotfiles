@@ -1,4 +1,5 @@
-#! /usr/bin/env sh
+#!/bin/bash
+
 package="cert-gen"
 ROOT=$(pwd)
 
@@ -258,10 +259,10 @@ done
 #   handle_error "missing secret name"
 # fi
 
-if [ $PROCESS == "root" ]; then
+if [ "$PROCESS" == "root" ]; then
   root
 fi
 
-if [ $PROCESS == "service" ]; then
+if [ "$PROCESS" == "service" ]; then
   service
 fi
