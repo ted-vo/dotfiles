@@ -1,4 +1,7 @@
 #! /usr/bin/env sh
+# Auhtor: Ted Vo - 2022/11/08
+# Auto build and pushish helm package to gitlab registry
+
 package="helmc"
 ROOT=$(pwd)
 
