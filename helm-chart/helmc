@@ -1,316 +1,312 @@
-#! /usr/bin/env sh
-# Auhtor: Ted Vo - 2022/11/08
-# Auto build and pushish helm package to gitlab registry
+#!/usr/bin/env bash
+# TedVo - 06/07/2023
 
-package="helmc"
-ROOT=$(pwd)
+##################################################################
+# Script help build | publish helm-chart Gitlab Package Registry #
+##################################################################
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null || exit && pwd)
+
+set -euo pipefail
 
 handle_error() {
-  echo ""
-  echo "Error: $1"
-  echo "Run 'helmc $2 --help' for usage."
+	echo "Error: $1"
+	echo "Run 'helmc ${2:-} -h|--help' for usage."
 
-  clean_up
-  exit 1
+	clean_up
+	exit 1
 }
 
 clean_up() {
-  cd $ROOT
-  rm -rf .temp/ &> /dev/null
+	cd "$SCRIPT_DIR" || exit
+	rm -rf .temp/ &>/dev/null
 }
 
-global_help() {
-  echo "Shell script for build or publish helm chart package"
-  echo ""
-  echo "Usage:"
-  echo "helmc [command]"
-  echo " "
-  echo "Available Commands:"
-  echo "  build       package chart"
-  echo "  publish     publish chart"
-  echo ""
-  echo "Flags:"
-  echo "  -h, --help                show brief help"
-  echo "  -v                        set the version on the chart to this semver version"
-  exit 0
+usage() {
+	cat <<EOS
+  Shell script for build or publish helm chart package
+
+  Usage:
+  helmc [command]
+
+  Available Commands:
+    build       package chart
+    publish     publish chart
+
+  Flags:
+    -h, --help                show brief help
+
+  Example:
+    helmc build -h
+    helmc publish -h
+EOS
 }
 
-build_help() {
-  echo "Build helm chart package"
-  echo ""
-  echo "Usage:"
-  echo "helmc build [flags]"
-  echo ""
-  echo "Available Commands:"
-  echo ""
-  echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in"
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir"
-  exit 0
+usage_build() {
+	cat <<EOS
+  Build helm chart package
+
+  Usage:
+  helmc build [flags]
+
+  Available Commands:
+
+  Flags:
+    -c, --chart-dir=DIR       specify a directory of chart path to store input in
+    -o, --output-dir=DIR      specify a directory to store output in. Default is current dir
+    -v                        set the version on the chart or using in Chart.yml
+
+  Example:
+    helmc build -c chart_dir -o output_dir -v v1.0.0
+EOS
 }
 
-publish_help() {
-  echo "Publish helm chart package"
-  echo ""
-  echo "Usage:"
-  echo "helmc publish [flags]"
-  echo ""
-  echo "Available Commands:"
-  echo ""
-  echo "Flags:"
-  echo "  -c, --chart-dir=DIR       specify a directory of chart path to store input in."
-  echo "  -p                        specify a project id."
-  echo "  -u                        username of publisher to gitlab registry.. What ever you want."
-  echo "  -t                        token (access token) for gitlab registry. Must have permission write registry."
-  echo "  -o, --output-dir=DIR      specify a directory to store output in. Default is current dir."
-  exit 0
+usage_publish() {
+	cat <<EOS
+  Publish helm chart package
+
+  Usage:
+  helmc publish [flags]
+
+  Available Commands:
+
+  Flags:
+    -c, --chart-dir=DIR       specify a directory of chart path to store input in.
+    -p                        specify a project id.
+    -u                        username of publisher to gitlab registry.. What ever you want.
+    -t                        token (access token) for gitlab registry. Must have permission write registry.
+    -v                        set the version on the chart or using in Chart.yml
+
+  Example:
+    helmc publish -c #CHART# -o output_dir -p #GITLAB_PROJECT_ID# -t #TOKEN# -u #USERNAME# -v v1.0.0
+EOS
 }
 
-parse_yaml {
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\):|\1|" \
-        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
+parse_yaml() {
+	local prefix=${2:-}
+	local s='[[:space:]]*'
+	local w='[a-zA-Z0-9_]*'
+	# shellcheck disable=SC2155
+	local fs="$(echo @ | tr @ '\034')"
+	# shellcheck disable=SC1087
+	sed -ne "s|^\($s\):|\1|" \
+		-e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+		-e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p" "$1" |
+		awk -F"$fs" '{
       indent = length($1)/2;
       vname[indent] = $2;
       for (i in vname) {if (i > indent) {delete vname[i]}}
       if (length($3) > 0) {
          vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+         printf("%s%s%s=\"%s\"\n", "'"$prefix"'",vn, $2, $3);
       }
    }'
 }
 
-build_package() {
-  if [ -z "$INPUT" ]; then
-    echo ""
-    echo "Error: chart input path is empty."
-    echo "Run 'helmc --help' for usage."
-    exit 1
-  fi
-  if [ -z "$OUTPUT" ]; then
-    export OUTPUT=$(pwd)
-    echo "[$PROCESS] No output. Using default: $OUTPUT"
-  fi
+build() {
+	local chart_dir
+	local output_dir
+	local new_version
 
-  eval $(parse_yaml $INPUT/Chart.yaml)
-  if [ -z "$VERSION" ]; then
-    VERSION=$version
-  fi
+	while test $# -gt 0; do
+		case "$1" in
+		-h | --help)
+			build_help
+			;;
+		-c)
+			shift
+			if test $# -gt 0; then
+				chart_dir=$1
+			else
+				handle_error "no input dir specified" "build"
+			fi
+			shift
+			;;
+		--chart-dir*)
+			chart_dir="$(echo "$1" | sed -e 's/^[^=]*=//g')"
+			shift
+			;;
+		-o)
+			shift
+			if test $# -gt 0; then
+				output_dir=$1
+			else
+				handle_error "no output dir specified" "build"
+			fi
+			shift
+			;;
+		--output-dir*)
+			output_dir="$(echo "$1" | sed -e 's/^[^=]*=//g')"
+			shift
+			;;
+		-v)
+			shift
+			if test $# -gt 0; then
+				new_version=$1
+			fi
+			shift
+			;;
+		*)
+			echo "Error: unknown flag \"$1\""
+			echo "Run 'helmc build -h' for usage."
+			exit 1
+			;;
+		esac
+	done
 
-  echo "[$PROCESS] Chart packaging..."
-  echo "[$PROCESS] $(helm package $INPUT -d $OUTPUT --version $VERSION)"
+	test "$chart_dir" || handle_error "Error: chart input path is empty" "build"
+
+	eval "$(parse_yaml "$chart_dir"/Chart.yaml)"
+	local V=${new_verion:=$version}
+
+	echo "[Build] Chart packaging..."
+	echo "[Build] $(helm package "$chart_dir" -d "${output_dir:=$SCRIPT_DIR}" --version "$V")"
 }
 
-publish_package() {
-  eval $(parse_yaml $INPUT/Chart.yaml)
-  echo "[$PROCESS] Name: $name"
+publish() {
+	local chart_dir
+	local project_id
+	local username
+	local token
+	local new_version
 
-  if [ -z "$VERSION" ]; then
-    VERSION=$version
-  fi
-  echo "[$PROCESS] Version: $VERSION"
+	while test $# -gt 0; do
+		case "$1" in
+		-h | --help)
+			usage_publish
+			;;
+		-c)
+			shift
+			if test $# -gt 0; then
+				chart_dir=$1
+			else
+				handle_error "no input dir specified" "publish"
+			fi
+			shift
+			;;
+		--chart-dir*)
+			chart_dir="$(echo "$1" | sed -e 's/^[^=]*=//g')"
+			shift
+			;;
+		-p)
+			shift
+			if test $# -gt 0; then
+				project_id=$1
+			fi
+			shift
+			;;
+		-u)
+			shift
+			if test $# -gt 0; then
+				username=$1
+			else
+				handle_error "no input username specified" "publish"
+			fi
+			shift
+			;;
+		-t)
+			shift
+			if test $# -gt 0; then
+				token=$1
+			else
+				handle_error "missing token" "publish" "publish"
+			fi
+			shift
+			;;
+		-v)
+			shift
+			if test $# -gt 0; then
+				new_version=$1
+			fi
+			shift
+			;;
+		*)
+			echo "Error: unknown flag \"$1\""
+			echo "Run 'helmc publish --help' for usage."
+			exit 1
+			;;
+		esac
+	done
 
-  # Gitlab Registry
-  if [ -z "$PROJECT_ID" ]; then
-    handle_error "unknow project Id." "publish" 
-  fi
+	eval "$(parse_yaml "$chart_dir"/Chart.yaml)"
+	local V=${new_version:=$version}
 
-  # Check Authenticate
-  if [ -z "$USER_NAME" ]; then
-    handle_error "missing username" "publish"
-  fi
-  echo "[$PROCESS] Username: $USER_NAME"
+	echo "[Publish] Name: ${name:-}"
+	echo "[Publish] Version: $V"
 
-  if [ -z "$TOKEN" ]; then
-    handle_error "missing token" "publish"
-  fi
-  echo "[$PROCESS] Token: ***"
+	# Gitlab Registry
+	test "$project_id" || handle_error "unknow project Id." "publish"
 
-  export URL=https://gitlab.com/api/v4/projects/$PROJECT_ID/packages/helm/api/stable/charts
-  echo "[$PROCESS] Url: $URL"
+	# Check Authenticate
+	test "$username" || handle_error "missing username" "publish"
 
-  local CHART_FILE_NAME="$name-$version"
-  local CHART_FORM="chart=@$CHART_FILE_NAME.tgz"
+	echo "[Publish] Username: $username"
 
-  mkdir .temp &> /dev/null
-  export OUTPUT=.temp/
+	test "$token" || handle_error "missing token" "publish"
+	echo "[Publish] Token: ***"
 
-  build_package
+	local gitlabURL="https://gitlab.com/api/v4/projects/$project_id/packages/helm/api/stable/charts"
+	echo "[Publish] Url: $gitlabURL"
 
-  echo "[$PROCESS] Chart '$CHART_FORM' publishing..."
-  
-  cd .temp/
-  RESPONSE=$(curl \
-     --silent \
-     --write-out '%{http_code}' \
-     --output /dev/null \
-     --request POST \
-     --form $CHART_FORM \
-     --user $USER_NAME:$TOKEN \
-     $URL)
+	local chartFileName="$name-$V"
+	local chartForm="chart=@$chartFileName.tgz"
 
-  if [ $RESPONSE == 200 ] | [ $RESPONSE == 201 ]; then
-    echo "[$PROCESS] $RESPONSE Successfully!!!"
-  else
-    if [ $RESPONSE == 404 ]; then
-    handle_error "404 Registry not found" "publish"
-    fi
-    if [ $RESPONSE == 401 ]; then
-      handle_error "401 Unauthorized" "publish"
-    fi
-    if [ $RESPONSE == 000 ]; then
-      handle_error "error-code=$RESPONSE" "publish"
-    fi
-  fi
+	local tempOutput=.temp/
+	mkdir $tempOutput &>/dev/null
 
-  clean_up
+	build -c "$chart_dir" -o "$tempOutput" -v "$V"
+
+	cd $tempOutput || exit
+
+	echo "[Publish] Chart '$chartForm' publishing..."
+	response=$(curl \
+		--silent \
+		--write-out '%{http_code}' \
+		--output /dev/null \
+		--request POST \
+		--form "$chartForm" \
+		--user "$username":"$token" \
+		"$gitlabURL")
+
+	case "$response" in
+	200 | 201)
+		echo "[Publish] $response Successfully!!!"
+		clean_up
+		exit
+		;;
+	404)
+		handle_error "404 Registry not found" "publish"
+		;;
+	401)
+		handle_error "401 Unauthorized" "publish"
+		;;
+	*)
+		handle_error "Unknow eror. Erro-code=$response" "publish"
+		;;
+	esac
 }
-
-while test $# -gt 0; do
-  case "$1" in
-    -h|--help)
-      global_help ;;
-    build)
-      shift
-      export PROCESS="build"
-      while test $# -gt 0; do
-        case "$1" in
-          -h|--help)
-            build_help ;;
-          -c)
-            shift
-            if test $# -gt 0; then
-              export INPUT=$1
-            else
-              echo "[$PROCESS] no input dir specified"
-              exit 1
-            fi
-            shift
-            ;;
-          --chart-dir*)
-            export INPUT=`echo $1 | sed -e 's/^[^=]*=//g'`
-            shift
-            ;;
-          -o)
-            shift
-            if test $# -gt 0; then
-              export OUTPUT=$1
-            else
-              echo "[$PROCESS] no output dir specified"
-              exit 1
-            fi
-            shift
-            ;;
-          --output-dir*)
-            export OUTPUT=`echo $1 | sed -e 's/^[^=]*=//g'`
-            shift
-            ;;
-          -v)
-            shift
-            if test $# -gt 0; then
-              export VERSION=$1
-            fi
-            shift
-            ;;
-          *)
-            echo "Error: unknown flag \"$1\" for \"helmc build\""
-            echo "Run 'helmc build --help' for usage."
-            exit 1
-            break
-            ;;
-          esac
-      done
-      shift
-      ;;
-    publish)
-      shift
-      export PROCESS="publish"
-      while test $# -gt 0; do
-        case "$1" in
-          -h|--help)
-            publish_help ;;
-          -c)
-            shift
-            if test $# -gt 0; then
-              export INPUT=$1
-            else
-              echo "[$PROCESS] no input dir specified"
-              exit 1
-            fi
-            shift
-            ;;
-          --chart-dir*)
-            export INPUT=`echo $1 | sed -e 's/^[^=]*=//g'`
-            shift
-            ;;
-          -p)
-            shift
-            if test $# -gt 0; then
-              export PROJECT_ID=$1
-            fi
-            shift
-            ;;
-          -u)
-            shift
-            if test $# -gt 0; then
-              export USER_NAME=$1
-            else
-              handle_error "no input username specified"
-            fi
-            shift
-            ;;
-          -t)
-            shift
-            if test $# -gt 0; then
-              export TOKEN=$1
-            else
-              handle_error "missing token" "publish"
-            fi
-            shift
-            ;;
-          -v)
-            shift
-            if test $# -gt 0; then
-              export VERSION=$1
-            fi
-            shift
-            ;;
-          *)
-            echo "Error: unknown flag \"$1\" for \"helmc publish\""
-            echo "Run 'helmc publish --help' for usage."
-            exit 1
-            break
-            ;;
-        esac
-      done
-      shift
-      ;;
-    *)
-      echo "Error: unknown command \"$1\" for \"helmc\""
-      echo "Run 'helmc --help' for usage."
-      exit 1
-      break
-      ;;
-  esac
-done
 
 # Check helm command
-if ! helm version &> /dev/null; then
-    echo "\"helm\" could not be found. See: https://helm.sh/docs/intro/install/!"
-    exit
-else
-    echo "[$PROCESS] Running on helm version : $(helm version)"
+if ! helm version &>/dev/null; then
+	echo "\"helm\" could not be found. See: https://helm.sh/docs/intro/install/!"
+	exit
 fi
 
-# Build check
-if [ $PROCESS == "build" ]; then
-  build_package
-fi
-
-# Publish check
-if [ $PROCESS == "publish" ]; then
-  publish_package
-fi
+case "$1" in
+"") ;;
+-h | --help)
+	usage
+	exit
+	;;
+build)
+	"$@"
+	exit
+	;;
+publish)
+	"$@"
+	exit
+	;;
+*)
+	handle_error "Unknow command"
+	;;
+esac

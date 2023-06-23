@@ -1,115 +1,152 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Auhtor: Ted Vo - 2022/11/08
 # Shell hellper connect sql cloud via proxy
 
+# https://gist.github.com/vncsna/64825d5609c146e80de8b1fd623011ca
+set -euo pipefail
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 OS_ARCH=$(uname | tr '[:upper:]' '[:lower:]')
 BIN_PATH=/usr/local/bin
 CLOUD_SQL_PROXY=$BIN_PATH/cloud_sql_proxy
+ICON_PASSED='\e[1;32m√\e[0m'
+ICON_ERROR='\e[1;31mx\e[0m'
 
 global_help() {
-  echo ""
-  echo "Shell script for run SQL Auth proxy client" 
-  echo ""
-  echo "Usage:"
-  echo "gcp-cloud-proxy [flag] => flag for fast connect mode"
-  echo "gcp-cloud-proxy        => without flag for selection mode"
-  echo " "
-  echo "Available Commands:"
-  echo ""
-  echo "Flags:"
-  echo "  -h, --help                show brief help"
-  echo "  -c, --connection-name     projectID:region:instanceID"
-  echo "  -p, --port                port local for forwarding"
-  exit 0
+	echo ""
+	echo "Shell script for run SQL Auth proxy client"
+	echo ""
+	echo "Usage:"
+	echo "gcp-cloud-proxy [flag] => flag for fast connect mode"
+	echo "gcp-cloud-proxy        => without flag for selection mode"
+	echo " "
+	echo "Available Commands:"
+	echo ""
+	echo "Flags:"
+	echo "  -h, --help                show brief help"
+	echo "  -c, --connection-name     projectID:region:instanceID"
+	echo "  -p, --port                port local for forwarding"
+	exit 0
 }
 
-install_cloud_sql_proxy_client() {
-  echo ""
-  echo " Downloading Cloud SQL Auth proxy client..."
-  if [ $OS_ARCH == "darwin" ]; then
-    curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
-  elif [ $OS_ARCH == "linux" ]; then
-    wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O $CLOUD_SQL_PROXY
-  fi
-
-  echo " Grant execute permission"
-  chmod +x $CLOUD_SQL_PROXY
-
-  echo " Done"
-  echo ""
+pass() {
+	printf '%s %s' "$ICON_PASSED" "$1"
 }
 
-require_shell() {
-  if ! cloud_sql_proxy -version &> /dev/null; then
-  echo "\"cloud_sql_proxy\" cloud not be found."
-  while true; do
-    read -p "Do you wish to install this program? (Yy or Nn): " yn
-    case $yn in
-      [Yy]* ) install_cloud_sql_proxy_client; break;;
-      [Nn]* ) exit;;
-      * ) echo "Please answer yes or no.";;
-    esac
-  done
- fi
+failure() {
+	printf '%s %s' "$ICON_ERROR" "$1"
+}
+
+install() {
+	echo "Cloud SQL Proxy"
+	echo "---------------"
+	if cloud_sql_proxy -version &>/dev/null; then
+		pass "installed\n"
+	else
+		echo "Downloading Cloud SQL Auth proxy client..."
+		if [[ $OS_ARCH == "darwin" ]]; then
+			curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
+		elif [[ $OS_ARCH == "linux" ]]; then
+			wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O $CLOUD_SQL_PROXY
+		fi
+
+		echo " Grant execute permission"
+		chmod +x $CLOUD_SQL_PROXY
+
+		pass "DONE\n"
+	fi
+
+	echo ""
+	echo ""
+	echo "Cloud SQL Proxy Hepler"
+	echo "----------------------"
+	if which gcp-cloud-proxy &>/dev/null; then
+		pass "installed\n"
+	else
+		ln -sf "$SCRIPT_DIR"/gcp-cloud-proxy.sh /usr/local/bin/gcp-cloud-proxy
+		/usr/local/bin/gcp-cloud-proxy -h
+		pass "DONE\n"
+	fi
 }
 
 connect_database() {
-  require_shell
-
-  # check port or assign default: 3306
-  if [ -z "$PORT" ]; then
-    PORT=3306
-  fi
-  echo ""
-  echo "-----------------------------------------------------------"
-  echo " Running with `cloud_sql_proxy -version`"
-  echo " Host: localhost"
-  echo " Port: $PORT"
-  echo "-----------------------------------------------------------"
-  cloud_sql_proxy -instances=$1=tcp:$PORT "-ip_address_types=PRIVATE"
+	# check port or assign default: 3306
+	if [[ -z $PORT ]]; then
+		PORT=3306
+	fi
+	echo ""
+	echo "-----------------------------------------------------------"
+	echo " Running with $(cloud_sql_proxy -version)"
+	echo " Host: localhost"
+	echo " Port: $PORT"
+	echo "-----------------------------------------------------------"
+	cloud_sql_proxy -instances="$1"=tcp:"$PORT" "-ip_address_types=PRIVATE"
 }
 
 selection_mode() {
-  PROJECT_ID=$(gcloud config get-value project)
-  REGION=$(gcloud config get-value compute/region)
-  echo ""
-  echo "-----------------------------------------------------------"
-  echo " Current GCP Project-Id: $PROJECT_ID"
-  echo "             Region    : $REGION"
-  echo "-----------------------------------------------------------"
-  echo " List SQL Instances"
-  gcloud sql instances list
-  echo "-----------------------------------------------------------"
+	PROJECT_ID=$(gcloud config get-value project)
+	REGION=$(gcloud config get-value compute/region)
 
-  read -p "Enter instance name ($PROJECT_ID:$REGION:YOUR_INPUT): " INSTANCE_NAME
-  connect_database $PROJECT_ID:$REGION:$INSTANCE_NAME
+	if [[ -z $PROJECT_ID ]]; then
+		echo "Error: Project not config"
+		exit 1
+	fi
+
+	if [[ -z $REGION ]]; then
+		failure "Region not config\n"
+	fi
+
+	echo ""
+	echo "-----------------------------------------------------------"
+	echo " Current GCP Project-Id: $PROJECT_ID"
+	echo "-----------------------------------------------------------"
+	echo " List SQL Instances"
+	gcloud sql instances list
+	echo "-----------------------------------------------------------"
+
+	if [[ -z $REGION ]]; then
+		read -rp "Enter REGION (location without zone a/b/c): " REGION
+	fi
+
+	read -rp "Enter NAME ($PROJECT_ID:$REGION:YOUR_INPUT) : " INSTANCE_NAME
+	connect_database "$PROJECT_ID":"$REGION":"$INSTANCE_NAME"
 }
 
+PORT=""
+CONNECTION_NAME=""
 while test $# -gt 0; do
-  case "$1" in
-    -h|--help)
-      global_help ;;
-    -c|--connection-name)
-      shift
-      CONNECTION_NAME=$1
-      shift
-      ;;
-    -p|--port)
-      shift
-      PORT=$1
-      shift
-      ;;
-    *)
-      echo ""
-      echo "Run 'gcp-cloud-proxy -h|--help' for usage."
-      exit 1
-      break
-      ;;
-  esac
+	case "$1" in
+	-h | --help)
+		global_help
+		;;
+	-c | --connection-name)
+		shift
+		CONNECTION_NAME=$1
+		shift
+		;;
+	-p | --port)
+		shift
+		PORT=$1
+		shift
+		;;
+	install)
+		"$@"
+		exit
+		;;
+	*)
+		echo ""
+		echo "Run 'gcp-cloud-proxy -h|--help' for usage."
+		exit 1
+		;;
+	esac
 done
 
-if [ ! -z $CONNECTION_NAME ]; then
-  connect_database $CONNECTION_NAME
-else
-  selection_mode
-fi
+main() {
+	if [ -z "$CONNECTION_NAME" ]; then
+		selection_mode
+	else
+		connect_database "$CONNECTION_NAME"
+	fi
+}
+
+main
