@@ -24,8 +24,8 @@ oh_my_zsh() {
 
 alacritty() {
 	start_spinner "  alacritty"
-	test -d "$HOME/.config" || mkdir -p "$HOME/.config"
-	ln -Fs "$ALACRITTY_PATH" "$HOME/.config/alacritty"
+	test -d "$HOME/.config" || mkdir -p "$HOME/.config/alacritty"
+	ln -Fs "$ALACRITTY_PATH/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
 	sleep 0.1
 	stop_spinner $?
 }
@@ -33,7 +33,7 @@ alacritty() {
 tmux() {
 	start_spinner "  tmux"
 	test -d "$HOME/.config" || mkdir -p "$HOME/.config/tmux"
-	ln -Fs "$TMUX_PATH" "$HOME/.config/tmux"
+	ln -Fs "$TMUX_PATH/tmux.conf" "$HOME/.tmux.conf"
 	sleep 0.1
 	stop_spinner $?
 }
