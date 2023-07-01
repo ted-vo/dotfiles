@@ -13,3 +13,5 @@
 **/*/*.key
 **/*/*.pem
 
+# tmux
+tmux/plugins
