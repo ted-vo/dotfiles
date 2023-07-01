@@ -46,8 +46,8 @@ window:
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
-   x: 20
-   y: 20
+   x: 10
+   y: 10
 
   # Spread additional padding evenly around the terminal content.
   #dynamic_padding: false
@@ -193,13 +193,13 @@ font:
   #builtin_box_drawing: true
 
 # If `true`, bold text is drawn using the bright color variants.
-#draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
 # Colors (Tomorrow Night)
 colors:
   # Default colors
   primary:
-   background: '#011627'
+   background: '#121212'
    foreground: '#bdc1c6'
 
     # Bright and dim foreground colors
