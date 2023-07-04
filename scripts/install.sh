@@ -31,9 +31,16 @@ alacritty() {
 }
 
 tmux() {
-	start_spinner "  tmux"
-	ln -Fs "$TMUX_PATH/tmux.conf" "$HOME/.tmux.conf"
-	sleep 0.1
+	start_spinner "  oh-my-tmux"
+	test -d "oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$TMUX_PATH/oh-my-tmux" &>/dev/null
+	cd "$TMUX_PATH/oh-my-tmux" && git pull &>/dev/null
+
+	# test -d "$HOME/.config/tmux" || mkdir -p "$HOME/.config/tmux"
+	# ln -fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
+	# ln -fs "$TMUX_PATH/tmux.conf.local" "$HOME/.config/tmux/tmux.conf.local"
+
+	ln -Fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
+	ln -Fs "$TMUX_PATH/tmux.conf.local" "$HOME/.tmux.conf.local"
 	stop_spinner $?
 }
 
