@@ -1,7 +1,6 @@
 # : << EOF
 # https://github.com/gpakosz/.tmux
-# (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license,
-#         without any warranty.
+# (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license, without any warranty.
 #         Copyright 2012— Gregory Pakosz (@gpakosz).
 
 
@@ -442,8 +441,13 @@ tmux_conf_uninstall_plugins_on_reload=true
 #set -g @plugin 'tmux-plugins/tmux-continuum'
 #set -g @continuum-restore 'on'
 
+set -g @plugin 'ted-vo/tmux-bitwarden'
 
 # -- custom variables ----------------------------------------------------------
+
+# bitwarden
+set -g @bw-copy-to-clipboard 'off'
+set -g @bw-session "$BW_SESSION"
 
 # to define a custom #{foo} variable, define a POSIX shell function between the
 # '# EOF' and the '# "$@"' lines. Please note that the opening brace { character
