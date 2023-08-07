@@ -1,3 +1,4 @@
+# folder view configuration files
 # macos 
 .DS_Store
 **/*/.DS_Store
@@ -16,3 +17,6 @@
 # tmux
 tmux/plugins
 tmux/oh-my-tmux
+
+# local
+**/.gitconfig.local
