@@ -2,13 +2,9 @@
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 ROOT_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
-ALACRITTY_PATH="$ROOT_DIR/alacritty"
-LOADING_PATH="$ROOT_DIR/shell-progress"
-TOOLBOX_BIN_PATH="$ROOT_DIR/bin"
-TMUX_PATH="$ROOT_DIR/tmux"
 
 # shellcheck disable=SC1091
-source "$LOADING_PATH/spinner.sh"
+source "$ROOT_DIR/bin/shell-progress/spinner.sh"
 
 zsh() {
 	start_spinner "  zsh"
@@ -25,7 +21,7 @@ oh_my_zsh() {
 alacritty() {
 	start_spinner "  alacritty"
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
-	ln -Fs "$ALACRITTY_PATH/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+	ln -Fs "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
 	sleep 0.1
 	stop_spinner $?
 }
@@ -33,14 +29,14 @@ alacritty() {
 tmux() {
 	start_spinner "  oh-my-tmux"
 	test -d "oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$TMUX_PATH/oh-my-tmux" &>/dev/null
-	cd "$TMUX_PATH/oh-my-tmux" && git pull &>/dev/null
+	cd "$ROOT_DIR/tmux/oh-my-tmux" && git pull &>/dev/null
 
 	# test -d "$HOME/.config/tmux" || mkdir -p "$HOME/.config/tmux"
 	# ln -fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
 	# ln -fs "$TMUX_PATH/tmux.conf.local" "$HOME/.config/tmux/tmux.conf.local"
 
-	ln -Fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
-	ln -Fs "$TMUX_PATH/tmux.conf.local" "$HOME/.tmux.conf.local"
+	ln -Fs "$ROOT_DIR/tmux/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
+	ln -Fs "$ROOT_DIR/tmux/tmux.conf.local" "$HOME/.tmux.conf.local"
 	stop_spinner $?
 }
 
@@ -49,7 +45,7 @@ toolbox() {
 	cat >>~/.zshrc <<EOF
 
 # toolbox/bin
-export PATH="$(printf '%s:$%s' "$TOOLBOX_BIN_PATH" "PATH")"
+export PATH="$(printf '%s:$%s' "$ROOT_DIR/bin" "PATH")"
 EOF
 	sleep 0.1
 	stop_spinner $?
