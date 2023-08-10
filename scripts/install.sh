@@ -6,6 +6,39 @@ ROOT_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
 # shellcheck disable=SC1091
 source "$ROOT_DIR/bin/shell-progress/spinner.sh"
 
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+if [ "$OS" == "darwin" ]; then
+	OS="osx"
+fi
+ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
+
+debug_msg() {
+	echo "$@" >&2
+}
+
+safelink() {
+	DOTFILE="$1"
+	CONFIG="$2"
+
+	# Continue if the link already exists
+	if [[ -L "$CONFIG" && "$DOTFILE" = "$(readlink "$CONFIG")" ]]; then
+		debug_msg "link $CONFIG -> $DOTFILE is already set up."
+		return
+	fi
+
+	# Back up any existing configuration.
+	if [[ -e "$CONFIG" ]]; then
+		local BACKUP
+		BACKUP="$CONFIG.dotfiles-backup.$(date '+%Y%m%d-%H%M%S')"
+		mv "$CONFIG" "$BACKUP"
+		debug_msg "Backed up $CONFIG to $BACKUP"
+	fi
+
+	# Write the link
+	mkdir -p "$(dirname "$CONFIG")"
+	ln -Fhis "$DOTFILE" "$CONFIG"
+}
+
 zsh() {
 	start_spinner "  zsh"
 	sleep 0.1
@@ -21,14 +54,14 @@ oh_my_zsh() {
 alacritty() {
 	start_spinner "  alacritty"
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
-	ln -Fs "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+	ln -fs "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
 	sleep 0.1
 	stop_spinner $?
 }
 
 gitconfig() {
 	start_spinner "  git"
-	ln -Fs "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
+	ln -fs "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
 	sleep 0.1
 	stop_spinner $?
 }
@@ -55,6 +88,10 @@ nvim() {
 	stop_spinner $?
 }
 
+dotfiles() {
+
+}
+
 toolbox() {
 	start_spinner "  toolbox/bin"
 	cat >>~/.zshrc <<EOF # toolbox/bin
@@ -65,6 +102,7 @@ EOF
 	sleep 0.1
 	stop_spinner $?
 }
+
 all() {
 	zsh
 	oh_my_zsh
