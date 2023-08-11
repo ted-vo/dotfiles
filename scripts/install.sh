@@ -22,7 +22,7 @@ safelink() {
 
 	# Continue if the link already exists
 	if [[ -L "$CONFIG" && "$DOTFILE" = "$(readlink "$CONFIG")" ]]; then
-		debug_msg "link $CONFIG -> $DOTFILE is already set up."
+		# debug_msg "link $CONFIG -> $DOTFILE is already set up."
 		return
 	fi
 
@@ -31,7 +31,7 @@ safelink() {
 		local BACKUP
 		BACKUP="$CONFIG.dotfiles-backup.$(date '+%Y%m%d-%H%M%S')"
 		mv "$CONFIG" "$BACKUP"
-		debug_msg "Backed up $CONFIG to $BACKUP"
+		# debug_msg "Backed up $CONFIG to $BACKUP"
 	fi
 
 	# Write the link
@@ -54,14 +54,14 @@ oh_my_zsh() {
 alacritty() {
 	start_spinner "  alacritty"
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
-	ln -fs "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+	safelink "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
 	sleep 0.1
 	stop_spinner $?
 }
 
 gitconfig() {
 	start_spinner "  git"
-	ln -fs "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
+	safelink "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
 	sleep 0.1
 	stop_spinner $?
 }
@@ -76,8 +76,8 @@ tmux() {
 	# ln -fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
 	# ln -fs "$TMUX_PATH/tmux.conf.local" "$HOME/.config/tmux/tmux.conf.local"
 
-	ln -Fs "$tmux_path/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
-	ln -Fs "$tmux_path/tmux.conf.local" "$HOME/.tmux.conf.local"
+	safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
+	safelink "$tmux_path/tmux.conf.local" "$HOME/.tmux.conf.local"
 	stop_spinner $?
 }
 
@@ -86,10 +86,6 @@ nvim() {
 	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" &>/dev/null
 	cd "$HOME/.config/nvim" && git pull origin main &>/dev/null
 	stop_spinner $?
-}
-
-dotfiles() {
-
 }
 
 toolbox() {
