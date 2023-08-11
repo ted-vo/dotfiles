@@ -54,7 +54,7 @@ oh_my_zsh() {
 alacritty() {
 	start_spinner "  alacritty"
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
-	safelink "$ROOT_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+	safelink "$ROOT_DIR/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 	sleep 0.1
 	stop_spinner $?
 }
