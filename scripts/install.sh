@@ -36,7 +36,7 @@ safelink() {
 
 	# Write the link
 	mkdir -p "$(dirname "$CONFIG")"
-	ln -Fhis "$DOTFILE" "$CONFIG"
+	ln -Fis "$DOTFILE" "$CONFIG"
 }
 
 zsh() {
