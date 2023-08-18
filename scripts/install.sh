@@ -51,6 +51,7 @@ safelink() {
 
 zsh() {
 	start_spinner "  zsh"
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" &>$INSTLOG
 	sleep 0.1
 	stop_spinner $?
 }
