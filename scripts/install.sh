@@ -12,6 +12,16 @@ if [ "$OS" == "darwin" ]; then
 fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
+# set some colors
+INSTLOG="install.log"
+CNT="[\e[1;36mNOTE\e[0m]"
+COK="[\e[1;32mOK\e[0m]"
+CER="[\e[1;31mERROR\e[0m]"
+CAT="[\e[1;37mATTENTION\e[0m]"
+CWR="[\e[1;35mWARNING\e[0m]"
+CAC="[\e[1;33mACTION\e[0m]"
+
+# set some color
 debug_msg() {
 	echo "$@" >&2
 }
@@ -52,11 +62,33 @@ oh_my_zsh() {
 }
 
 alacritty() {
-	start_spinner "  alacritty"
+	# local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
+	echo -e "$CNT alacritty"
+
+	if [[ $OS == 'linux' ]] && which alacritty &>/dev/null; then
+		echo -e "$CAT - Alacritty not found"
+		read -rep "$CAC Would you like to install Alacritty? (y|n)" ALACRITTY
+
+		git clone https://github.com/alacritty/alacritty.git &>>$INSTLOG
+		cd alacritty
+
+		# libraries required
+		sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python &>$INSTLOG
+
+		# check terminfo
+		test infocmp alacritty &>/dev/null || sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+
+		# use artifact
+		sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
+		sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+		sudo desktop-file-install extra/linux/Alacritty.desktop
+		sudo update-desktop-database
+	else
+		echo -e "\e[1A\e[K$COK - $1 was installed."
+	fi
+
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
 	safelink "$ROOT_DIR/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
-	sleep 0.1
-	stop_spinner $?
 }
 
 gitconfig() {
