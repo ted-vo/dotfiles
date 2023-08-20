@@ -20,3 +20,4 @@ tmux/oh-my-tmux
 
 # local
 **/.gitconfig.local
+install.log
