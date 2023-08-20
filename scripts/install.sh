@@ -66,9 +66,10 @@ alacritty() {
 	# local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
 	echo -e "$CNT alacritty"
 
-	if [[ $OS == 'linux' ]] && which alacritty &>/dev/null; then
+	if [[ $OS == 'linux' ]] && ! which alacritty &>/dev/null; then
 		echo -e "$CAT - Alacritty not found"
-		read -rep "$CAC Would you like to install Alacritty? (y|n)" ALACRITTY
+		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
+		test $ALACRITTY != 'y' && exit
 
 		git clone https://github.com/alacritty/alacritty.git &>>$INSTLOG
 		cd alacritty
