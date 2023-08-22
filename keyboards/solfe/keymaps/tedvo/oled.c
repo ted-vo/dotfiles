@@ -55,19 +55,21 @@ static void print_status_narrow(void) {
   oled_write_ln_P(PSTR("LAYER"), false);
   switch (get_highest_layer(layer_state)) {
       case 0:
+          oled_write_P(PSTR("Qwrty\n"), false);
+          break;
       case 1:
-          oled_write_P(PSTR("Base\n"), false);
+          oled_write_P(PSTR("Colmk\n"), false);
           break;
       case 2:
-          oled_write_P(PSTR("Raise"), false);
+          oled_write_P(PSTR("Lower\n"), false);
           break;
       case 3:
-          oled_write_P(PSTR("Lower"), false);
+          oled_write_P(PSTR("Raise\n"), false);
           break;
       default:
           oled_write_ln_P(PSTR("Undef"), false);
   }
-  oled_write_P(PSTR("\n\n"), false);
+  oled_write_P(PSTR("\n"), false);
   led_t led_usb_state = host_keyboard_led_state();
   oled_write_ln_P(PSTR("CPSLK"), led_usb_state.caps_lock);
 }
