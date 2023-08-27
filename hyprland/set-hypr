@@ -301,11 +301,11 @@ if [[ $CFG == "Y" || $CFG == "y" ]]; then
 	ln -sf ~/.config/HyprV/kitty/kitty.conf ~/.config/kitty/kitty.conf
 	ln -sf ~/.config/HyprV/mako/conf/config-dark ~/.config/mako/config
 	ln -sf ~/.config/HyprV/swaylock/config ~/.config/swaylock/config
-	ln -sf ~/.config/HyprV/waybar/conf/v4-config.jsonc ~/.config/waybar/config.jsonc
-	ln -sf ~/.config/HyprV/waybar/style/v4-style-dark.css ~/.config/waybar/style.css
+	ln -sf ~/.config/HyprV/waybar/conf/v2-config.jsonc ~/.config/waybar/config.jsonc
+	ln -sf ~/.config/HyprV/waybar/style/v2-style-dark.css ~/.config/waybar/style.css
 	ln -sf ~/.config/HyprV/wlogout/layout ~/.config/wlogout/layout
 	ln -sf ~/.config/HyprV/wofi/config ~/.config/wofi/config
-	ln -sf ~/.config/HyprV/wofi/style/v4-style-dark.css ~/.config/wofi/style.css
+	ln -sf ~/.config/HyprV/wofi/style/v2-style-dark.css ~/.config/wofi/style.css
 
 	# add the Nvidia env file to the config (if needed)
 	if [[ "$ISNVIDIA" == true ]]; then
@@ -337,16 +337,16 @@ if [[ $CFG == "Y" || $CFG == "y" ]]; then
 	cp -f ~/.config/HyprV/backgrounds/v4-background-dark.jpg /usr/share/sddm/themes/sdt/wallpaper.jpg
 fi
 
-### Install the starship shell ###
-read -rep $'[\e[1;33mACTION\e[0m] - Would you like to activate the starship shell? (y,n) ' STAR
-if [[ $STAR == "Y" || $STAR == "y" ]]; then
-	# install the starship shell
-	echo -e "$CNT - Hansen Crusher, Engage!"
-	echo -e "$CNT - Updating .bashrc..."
-	echo -e '\neval "$(starship init bash)"' >>~/.bashrc
-	echo -e "$CNT - copying starship config file to ~/.config ..."
-	cp Extras/starship.toml ~/.config/
-fi
+# ### Install the starship shell ###
+# read -rep $'[\e[1;33mACTION\e[0m] - Would you like to activate the starship shell? (y,n) ' STAR
+# if [[ $STAR == "Y" || $STAR == "y" ]]; then
+# 	# install the starship shell
+# 	echo -e "$CNT - Hansen Crusher, Engage!"
+# 	echo -e "$CNT - Updating .bashrc..."
+# 	echo -e '\neval "$(starship init bash)"' >>~/.bashrc
+# 	echo -e "$CNT - copying starship config file to ~/.config ..."
+# 	cp Extras/starship.toml ~/.config/
+# fi
 
 ### Script is done ###
 echo -e "$CNT - Script had completed!"
