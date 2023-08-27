@@ -28,7 +28,7 @@ default-timeout=5000
 ignore-timeout=0
 max-visible=5
 layer=overlay
-anchor=center
+anchor=top-right
 
 background-color=#e7e7ec
 text-color=#1e1e2e
