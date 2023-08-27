@@ -12,16 +12,26 @@ if [ "$OS" == "darwin" ]; then
 fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
+# Regular Colors
+Black='\e[1;30m'  # Black
+Red='\e[1;31m'    # Red
+Green='\e[1;32m'  # Green
+Yellow='\e[1;33m' # Yellow
+Blue='\e[1;34m'   # Blue
+Purple='\e[1;35m' # Purple
+Cyan='\e[1;36m'   # Cyan
+White='\e[1;37m'  # White
+NC='\e[0m'        # No Color
+
 # set some colors
 INSTLOG="install.log"
-CNT="[\e[1;36mNOTE\e[0m]"
-COK="[\e[1;32mOK\e[0m]"
-CER="[\e[1;31mERROR\e[0m]"
-CAT="[\e[1;37mATTENTION\e[0m]"
-CWR="[\e[1;35mWARNING\e[0m]"
-CAC="[\e[1;33mACTION\e[0m]"
+CNT="[${Cyan}NOTE${NC}]"
+COK="[${Green}OK${NC}]"
+CER="[${Red}ERROR${NC}]"
+CAT="[${White}ATTENTION${NC}]"
+CWR="[${Purple}WARNING${NC}]"
+CAC="[${Yellow}ACTION${NC}]"
 
-# set some color
 debug_msg() {
 	echo "$@" >&2
 }
@@ -178,7 +188,7 @@ main() {
 		exit
 		;;
 	*)
-		echo "Not support!"
+		echo -e "$CER Not support!"
 		exit
 		;;
 	esac
