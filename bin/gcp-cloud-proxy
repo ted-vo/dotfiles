@@ -30,18 +30,18 @@ global_help() {
 }
 
 pass() {
-	printf '%s %s' "$ICON_PASSED" "$1"
+	echo -e "$ICON_PASSED $1"
 }
 
 failure() {
-	printf '%s %s' "$ICON_ERROR" "$1"
+	echo -e "$ICON_ERROR $1"
 }
 
 install() {
 	echo "Cloud SQL Proxy"
 	echo "---------------"
 	if cloud_sql_proxy -version &>/dev/null; then
-		pass "installed\n"
+		pass "installed"
 	else
 		echo "Downloading Cloud SQL Auth proxy client..."
 		if [[ $OS_ARCH == "darwin" ]]; then
@@ -53,7 +53,7 @@ install() {
 		echo " Grant execute permission"
 		chmod +x $CLOUD_SQL_PROXY
 
-		pass "DONE\n"
+		pass "DONE"
 	fi
 
 	echo ""
@@ -61,11 +61,11 @@ install() {
 	echo "Cloud SQL Proxy Hepler"
 	echo "----------------------"
 	if which gcp-cloud-proxy &>/dev/null; then
-		pass "installed\n"
+		pass "installed"
 	else
 		ln -sf "$SCRIPT_DIR"/gcp-cloud-proxy.sh /usr/local/bin/gcp-cloud-proxy
 		/usr/local/bin/gcp-cloud-proxy -h
-		pass "DONE\n"
+		pass "DONE"
 	fi
 }
 
@@ -93,7 +93,7 @@ selection_mode() {
 	fi
 
 	if [[ -z $REGION ]]; then
-		failure "Region not config\n"
+		failure "Region not config"
 	fi
 
 	echo ""
