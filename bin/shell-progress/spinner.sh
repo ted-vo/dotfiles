@@ -26,7 +26,6 @@ _spinner() {
 	# on start: $2 display message
 	# on stop : $2 process exit status
 	#           $3 spinner function pid (supplied from stop_spinner)
-
 	local on_success="DONE"
 	local on_fail="FAIL"
 	# local white="\e[1;37m"
