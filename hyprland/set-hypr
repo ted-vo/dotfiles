@@ -157,7 +157,7 @@ fi
 
 # find the Nvidia GPU
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
-	ISNVIDIA=true
+	ISNVIDIA="true"
 else
 	ISNVIDIA=false
 fi
