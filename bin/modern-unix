@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+
+source "$SCRIPT_DIR/installer"
+
+modern_unix=(
+	cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
+	duf       # Disk Usage/Free Utility
+	ripgrep   # Recursively searchs directories
+	fzf       # fuzzy finder
+	jq        # json processor
+	dog       # DNS lookup
+	xh        # http requets tools written in Rust
+)
+
+sudo_warning() {
+	# let the user know that we will use sudo
+	echo -e "$CNT - This script will run some commands that require sudo. You will be prompted to enter your password.
+If you are worried about entering your password then you may want to review the content of the script."
+	sleep 1
+}
+
+install() {
+	sudo_warning
+	echo "  Install modern_unix"
+	sudo touch /tmp/dotfiles.tmp
+	for SHELL in ${modern_unix[@]}; do
+		install_software $SHELL
+	done
+}
+
+help_ls() {
+	echo -e "$CNT Checking list of modern unix.\n"
+	for SHELL in ${modern_unix[@]}; do
+		if yay -Q $SHELL &>>/dev/null; then
+			echo -e "\e[1A\e[K$COK - $SHELL was installed."
+		else
+			# if this is hit then a package is missing, exit to review log
+			echo -e "\e[1A\e[K$CER - $SHELL not installed"
+		fi
+		echo ""
+	done
+}
+
+main() {
+	case $1 in
+	install)
+		install
+		exit
+		;;
+	ls)
+		help_ls
+		exit
+		;;
+	esac
+}
+
+main $@
