@@ -3,7 +3,15 @@
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[-1]}")" &>/dev/null && pwd)
 
 source "$SCRIPT_DIR/colorized"
-source "$SCRIPT_DIR/simple_progress.sh"
+
+show_progress() {
+	while ps | grep $1 &>/dev/null; do
+		echo -n "."
+		sleep 2
+	done
+	echo -en "Done!\n"
+	sleep 2
+}
 
 # function that will test for a package and if not found it will attempt to install it
 install_software() {
