@@ -6,7 +6,7 @@ BIN_DIR="$ROOT_DIR/bin"
 
 # shellcheck disable=SC1091
 source "$BIN_DIR/colorized"
-source "$BIN_DIR/shell-progress/spinner.sh"
+source "$BIN_DIR/shell-progress/simple_progress.sh"
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
@@ -15,6 +15,14 @@ fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 INSTLOG="install.log"
+
+info() {
+	echo -e "${White}$@ ${Color_Off}"
+}
+
+info_bold() {
+	echo -e "${Bold_White}$@ ${Color_Off}"
+}
 
 debug_msg() {
 	echo "$@" >&2
@@ -47,29 +55,17 @@ safelink() {
 
 	# Write the link
 	mkdir -p "$(dirname "$CONFIG")"
-	ln -Fis "$DOTFILE" "$CONFIG"
+	ln -fs "$DOTFILE" "$CONFIG"
 }
 
 zsh() {
-	start_spinner "  zsh"
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" &>$INSTLOG
-	sleep 0.1
-	stop_spinner $?
-}
-
-oh_my_zsh() {
-	start_spinner "  oh_my_zsh"
-	sleep 0.1
-	stop_spinner $?
+	safelink "$ROOT_DIR/.zshrc" "$HOME/.zshrc"
 }
 
 alacritty() {
 	# local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
-	echo -e "$CNT alacritty"
-
-	sudo_warning
-
 	if [[ $OS == 'linux' ]] && ! which alacritty &>/dev/null; then
+		sudo_warning
 		echo -e "$CAT - Alacritty not found"
 		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
 		test $ALACRITTY != 'y' && exit
@@ -88,8 +84,6 @@ alacritty() {
 		sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
 		sudo desktop-file-install extra/linux/Alacritty.desktop
 		sudo update-desktop-database
-	else
-		echo -e "\e[1A\e[K$COK - $1 was installed."
 	fi
 
 	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
@@ -97,88 +91,84 @@ alacritty() {
 }
 
 gitconfig() {
-	start_spinner "  git"
 	safelink "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
-	sleep 0.1
-	stop_spinner $?
 }
 
 tmux() {
-	local tmux_path="$ROOT_DIR/tmux"
-	start_spinner "  oh-my-tmux"
-	test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" &>/dev/null
-	cd "$tmux_path/oh-my-tmux" && git pull &>/dev/null
+	local tmux_path="$ROOT_DIR/.config/tmux"
+	test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" &>$INSTLOG
+	cd "$tmux_path/oh-my-tmux" && git pull &>$INSTLOG
 
-	# test -d "$HOME/.config/tmux" || mkdir -p "$HOME/.config/tmux"
-	# ln -fs "$TMUX_PATH/oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
-	# ln -fs "$TMUX_PATH/tmux.conf.local" "$HOME/.config/tmux/tmux.conf.local"
-
-	safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$HOME/.tmux.conf"
-	safelink "$tmux_path/tmux.conf.local" "$HOME/.tmux.conf.local"
-	stop_spinner $?
+	safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$tmux_path/tmux.conf"
+	safelink "$tmux_path" "$HOME/.config/tmux"
 }
 
 nvim() {
-	start_spinner "  nvim"
-	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" &>/dev/null
-	cd "$HOME/.config/nvim" && git pull origin main &>/dev/null
-	stop_spinner $?
+	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" &>$INSTLOG
+	cd "$HOME/.config/nvim" && git pull origin main &>$INSTLOG
 }
 
 toolbox() {
-	start_spinner "  toolbox/bin"
-	sleep 0.1
 	if [[ "$PATH" != *"dotfiles/bin"* ]]; then
 		cat >>~/.zshrc <<EOF
     
 # toolbox/bin
-export PATH="$(
-			printf '%s:$%s' "$ROOT_DIR/bin" "PATH"
-		)"
-    
+export DOTFILES_HOME="$HOME/.dotfiles"
+case ":$PATH:" in
+  *":$DOTFILE:"*) ;;
+  *) export PATH="$DOTFILE/bin:$PATH" ;;
+esac
 EOF
 	fi
-	stop_spinner $?
 }
 
 all() {
-	zsh
-	oh_my_zsh
-	alacritty
-	gitconfig
-	tmux
-	nvim
-	toolbox
+	alacritty &
+	show_progress "${White}  alacritty" $!
+
+	gitconfig &
+	show_progress "${White}  gitconfig" $!
+
+	tmux &
+	show_progress "${White}  oh-my-tmux" $!
+
+	nvim &
+	show_progress "${White}  neovim" $!
+
+	toolbox &
+	show_progress "${White}  toolbox" $!
 }
 
 main() {
 	case $1 in
 	zsh)
-		zsh
-		exit
-		;;
-	oh-my-zsh)
-		oh_my_zsh
+		zsh &
+		show_progress "${White}  zsh" $!
 		exit
 		;;
 	alacritty)
-		alacritty
+		alacritty &
+		show_progress "${White}  alacritty" $!
 		exit
 		;;
 	gitconfig)
-		gitconfig
+		gitconfig &
+		show_progress "${White}  gitconfig" $!
 		exit
 		;;
 	tmux)
-		tmux
+		tmux &
+		show_progress "${White}  oh-my-tmux" $!
 		exit
 		;;
 	nvim)
-		nvim
+		nvim &
+		show_progress "${White}  neovim" $!
 		exit
 		;;
 	toolbox)
-		toolbox
+		toolbox &
+		show_progress "${White}  toolbox" $!
 		exit
 		;;
 	modern-unix)
