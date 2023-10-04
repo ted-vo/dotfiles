@@ -9,7 +9,12 @@ Blue='\e[1;34m'   # Blue
 Purple='\e[1;35m' # Purple
 Cyan='\e[1;36m'   # Cyan
 White='\e[1;37m'  # White
-NC='\e[0m'        # No Color
+
+NC='\e[0m' # No Color
+
+# Bold color
+Bold_Green='\033[1;32m' # Bold Green
+Bold_White='\033[1m'    # Bold White
 
 # set some colors
 CNT="[${Cyan}NOTE${NC}]"
