@@ -15,8 +15,8 @@
 **/*/*.pem
 
 # tmux
-tmux/plugins
-tmux/oh-my-tmux
+**/tmux/plugins
+**/tmux/oh-my-tmux
 
 # local
 **/.gitconfig.local
