@@ -61,9 +61,9 @@ TMUX_CONF="$XDG_CONFIG_HOME/tmux/tmux.conf"
     
 # toolbox/bin
 export DOTFILES_HOME="/home/ted/.dotfiles"
-case ":/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin:" in
-  *"::"*) ;;
-  *) export PATH="/bin:/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin" ;;
+case ":$PATH:" in
+  *":$DOTFILES_HOME:"*) ;;
+  *) export PATH="$DOTFILES_HOME/bin:$PATH" ;;
 esac
 
 # --- ibus configure
@@ -104,17 +104,3 @@ esac
 [ -s "/home/ted/.bun/_bun" ] && source "/home/ted/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-    
-# toolbox/bin
-export DOTFILES_HOME="/home/ted/.dotfiles"
-case ":/home/ted/.bun/bin:/home/ted/.local/share/pnpm:/home/ted/go/bin:/home/ted/.local/bin:/home/ted/.local/share/gem/ruby/3.0.0/bin:/home/ted/.cargo/bin:/home/ted/.asdf/shims:/home/ted/.asdf/bin:/home/ted/google-cloud-sdk/bin:/bin:/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin:" in
-  *"::"*) ;;
-  *) export PATH="/bin:/home/ted/.bun/bin:/home/ted/.local/share/pnpm:/home/ted/go/bin:/home/ted/.local/bin:/home/ted/.local/share/gem/ruby/3.0.0/bin:/home/ted/.cargo/bin:/home/ted/.asdf/shims:/home/ted/.asdf/bin:/home/ted/google-cloud-sdk/bin:/bin:/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin" ;;
-esac
-    
-# toolbox/bin
-export DOTFILES_HOME="/home/ted/.dotfiles"
-case ":/home/ted/.bun/bin:/home/ted/.local/share/pnpm:/home/ted/go/bin:/home/ted/.local/bin:/home/ted/.local/share/gem/ruby/3.0.0/bin:/home/ted/.cargo/bin:/home/ted/.asdf/shims:/home/ted/.asdf/bin:/home/ted/google-cloud-sdk/bin:/bin:/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin:" in
-  *"::"*) ;;
-  *) export PATH="/bin:/home/ted/.bun/bin:/home/ted/.local/share/pnpm:/home/ted/go/bin:/home/ted/.local/bin:/home/ted/.local/share/gem/ruby/3.0.0/bin:/home/ted/.cargo/bin:/home/ted/.asdf/shims:/home/ted/.asdf/bin:/home/ted/google-cloud-sdk/bin:/bin:/home/ted/.local/share/zinit/polaris/bin:/usr/local/bin:/usr/bin" ;;
-esac

@@ -70,7 +70,7 @@ alacritty() {
 		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
 		test $ALACRITTY != 'y' && exit
 
-		git clone https://github.com/alacritty/alacritty.git &>>$INSTLOG
+		git clone https://github.com/alacritty/alacritty.git &>$INSTLOG
 		cd alacritty
 
 		# libraries required
@@ -108,20 +108,6 @@ nvim() {
 	cd "$HOME/.config/nvim" && git pull origin main &>$INSTLOG
 }
 
-toolbox() {
-	if [[ "$PATH" != *"dotfiles/bin"* ]]; then
-		cat >>~/.zshrc <<EOF
-    
-# toolbox/bin
-export DOTFILES_HOME="$HOME/.dotfiles"
-case ":$PATH:" in
-  *":$DOTFILE:"*) ;;
-  *) export PATH="$DOTFILE/bin:$PATH" ;;
-esac
-EOF
-	fi
-}
-
 all() {
 	alacritty &
 	show_progress "${White}  alacritty" $!
@@ -134,9 +120,6 @@ all() {
 
 	nvim &
 	show_progress "${White}  neovim" $!
-
-	toolbox &
-	show_progress "${White}  toolbox" $!
 }
 
 main() {
@@ -164,11 +147,6 @@ main() {
 	nvim)
 		nvim &
 		show_progress "${White}  neovim" $!
-		exit
-		;;
-	toolbox)
-		toolbox &
-		show_progress "${White}  toolbox" $!
 		exit
 		;;
 	modern-unix)

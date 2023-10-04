@@ -16,7 +16,7 @@ show_progress() {
 	local red="\e[1;31m"
 	local nc="\e[0m"
 
-	local padding=90
+	local padding=5
 
 	# calculate the column where spinner and status msg will be displayed
 	column=$(($(tput cols) - ${#1} - padding))
