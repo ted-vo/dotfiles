@@ -53,11 +53,12 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 alias dotfilesconf="vim $HOME/.dotfiles"
 
 # TMUX
-ZSH_TMUX_AUTOSTART=true
+TMUX_CONF="${XDG_CACHE_HOME:-$HOME/.config}/tmux/tmux.conf"
 ZSH_TMUX_CONFIG="${XDG_CACHE_HOME:-$HOME/.config}/tmux/tmux.conf"
 ZSH_TMUX_DEFAULT_SESSION_NAME='workspace'
 
-TMUX_CONF="$XDG_CONFIG_HOME/tmux/tmux.conf"
+export EDITOR="nvim"
+export VISUAL="nvim"
     
 # toolbox/bin
 export DOTFILES_HOME="/home/ted/.dotfiles"
@@ -70,7 +71,7 @@ esac
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
-pgrep ibus-daemon $2>1 || ibus-daemon -dxr
+pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 
 # --- Gcloud ------------------------ 
 # The next line updates PATH for the Google Cloud SDK.
@@ -104,3 +105,6 @@ esac
 [ -s "/home/ted/.bun/_bun" ] && source "/home/ted/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# --- Load local -------------------
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
