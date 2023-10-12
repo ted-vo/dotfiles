@@ -61,7 +61,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
     
 # toolbox/bin
-export DOTFILES_HOME="/home/ted/.dotfiles"
+export DOTFILES_HOME="$HOME/.dotfiles"
 case ":$PATH:" in
   *":$DOTFILES_HOME:"*) ;;
   *) export PATH="$DOTFILES_HOME/bin:$PATH" ;;
@@ -75,10 +75,10 @@ pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 
 # --- Gcloud ------------------------ 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/ted/google-cloud-sdk/path.zsh.inc' ]; then . '/home/ted/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/ted/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/ted/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 # --- .asdf ------------------------
 . "$HOME/.asdf/asdf.sh"
@@ -95,14 +95,14 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
 # ---- PNPM ------------------------
-export PNPM_HOME="/home/ted/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
 # ---- Bun -------------------------
-[ -s "/home/ted/.bun/_bun" ] && source "/home/ted/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
