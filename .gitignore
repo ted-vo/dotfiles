@@ -20,4 +20,6 @@
 
 # local
 **/.gitconfig.local
+.config/tmux/tmux.conf
 install.log
+
