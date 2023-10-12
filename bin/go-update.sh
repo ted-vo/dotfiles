@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
-release=($(wget -qO- "https://golang.org/VERSION?m=text"))
-release_version=${release[0]}
-
 if ! which go &>/dev/null; then
 	echo "Golang not install yet"
 else
 	echo "Golang installed. Checking..."
+	release=($(wget -qO- "https://golang.org/VERSION?m=text"))
+	release_version=${release[0]}
 	version=$(go tool dist version)
 
 	if [[ "$version" == "$release_version"* ]]; then
