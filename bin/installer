@@ -15,6 +15,34 @@ show_progress() {
 
 # function that will test for a package and if not found it will attempt to install it
 install_software() {
+	if yay -v >/dev/null; then
+		arch_linux
+	else
+		ubuntu
+	fi
+}
+
+ubuntu() {
+	# First lets see if the package is there
+	if dpkg -s $1 &>>/dev/null; then
+		echo -e "$COK - $1 is already installed."
+	else
+		# no package found so installing
+		echo -en "$CNT - Now installing $1 ."
+		apt install -y $1 &>>$INSTLOG &
+		show_progress $!
+		# test to make sure package installed
+		if dpkg -Q $1 &>>/dev/null; then
+			echo -e "\e[1A\e[K$COK - $1 was installed."
+		else
+			# if this is hit then a package is missing, exit to review log
+			echo -e "\e[1A\e[K$CER - $1 install had failed, please check the install.log"
+			exit
+		fi
+	fi
+}
+
+arch_linux() {
 	# First lets see if the package is there
 	if yay -Q $1 &>>/dev/null; then
 		echo -e "$COK - $1 is already installed."
