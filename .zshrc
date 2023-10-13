@@ -48,8 +48,8 @@ source <(kubectl completion zsh)
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 alias vim=nvim
-alias zshconfig="vim ~/.zshrc"
-alias ohmyzsh="vim ~/.oh-my-zsh"
+alias zshconfig="vim $HOME/.zshrc"
+alias ohmyzsh="vim $HOME/.oh-my-zsh"
 alias dotfilesconf="vim $HOME/.dotfiles"
 
 # TMUX
@@ -107,4 +107,4 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # --- Load local -------------------
-[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+[ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
