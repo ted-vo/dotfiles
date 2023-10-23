@@ -100,7 +100,8 @@ setbg)
 	restart_waybar
 	;;
 sync-back)
-	rsync -au "$HOME/.config/hyprland" "$HOME/.dotfiles/.config"
+	rsync -au "$HOME/.config/hypr" "$HOME/.dotfiles/.config/hyprland"
+	exit
 	;;
 swkb)
 	switch_keyboard
