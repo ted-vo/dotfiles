@@ -1,0 +1,17 @@
+{
+  "custom/myhyprv": {
+    //shows the current theme profile and switches to next on click
+    "exec": "~/.config/hyprland/hyprv_util",
+    "return-type" : "json",
+    "interval": 30,
+    "format": "{}",
+    "on-click": "~/.config/hyprland/hyprv_util vswitch",
+    "tooltip": true
+  },
+
+  "custom/light_dark": {
+    "format": "󰐾",
+    "on-click": "~/.config/hyprland/waybar/scripts/baraction light",
+    "tooltip": false
+  }
+}
