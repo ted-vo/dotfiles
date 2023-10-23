@@ -40,9 +40,10 @@ prep_stage=(
 	qt5-graphicaleffects
 	gtk3
 	polkit-gnome # needed to get superuser access on some graphical appliaction
-	pipewire
-	wireplumber
-	jq # JSON
+
+	pipewire    # new low-level multimedia framework
+	wireplumber # powerful session and policy manager for PipeWire
+	jq          # JSON
 	wl-clipboard
 	cliphist
 	python-requests # needed for the weather module script to execute
@@ -73,25 +74,29 @@ install_stage=(
 	slurp                       # This helps with screenshots, it selects a region in a Wayland compositor
 	thunar                      # GUID file manager
 	btop                        # Activities manager
-	firefox                     # Browser
-	mpv                         # Media player
-	pamixer                     # This helps with audio settings such as volume
-	pavucontrol                 # volume control
+
+	google-chrome # Browser
+	firefox       # Browser
+
+	pavucontrol # volume control
+	mpv         # Media player
+	pamixer     # This helps with audio settings such as volume
 
 	brightnessctl # used to control monitor bright level
 	bluez         # the bluetooth service
+	blueman       # GUID bluetooth manager
 	bluez-utils   # command line utilities to interact with bluettoth devices
 
-	blueman
-	network-manager-applet # NetworkManager
-	gvfs                   #  adds missing functionality to thunar such as automount usb drives
-	thunar-archive-plugin
-	file-roller # archive manager
-	starship    # allows to customize the shell prompt
+	network-manager-applet # network manager
+	gvfs                   # adds missing functionality to thunar such as automount usb drives
+	thunar-archive-plugin  # thunar archive file manager
+	file-roller            # archive manager
+	starship               # allows to customize the shell prompt
 	papirus-icon-theme
 
-	ttf-jetbrains-mono-nerd # Som nerd fonts for icons and overall look
-	noto-fonts-emoji        # fonts needed by the weather script in the top bar
+	adobe-source-han-sans-cn-fonts # chinese fonts
+	ttf-jetbrains-mono-nerd        # Som nerd fonts for icons and overall look
+	noto-fonts-emoji               # fonts needed by the weather script in the top bar
 
 	lxappearance   # used to set GTK theme
 	xfce4-settings # set of tools for xfce, needed to set GTK theme
