@@ -65,19 +65,21 @@ tmux_conf_24b_colour=auto
 #   - tmux_conf_theme_synchronized
 tmux_conf_theme=enabled
 
-# --- begin nightfy colors schemas
-tmux_conf_theme_color_fg="#bdc1c6"
-tmux_conf_theme_color_bg="#121212"
+tmux_conf_theme_color_fg="#cdd6f4"
+tmux_conf_theme_color_bg="#1e1e2e"
 
 # Normal colors
-tmux_conf_theme_color_black="#1d3b53"
-tmux_conf_theme_color_red="#fc514e"
-tmux_conf_theme_color_green="#a1cd5e"
-tmux_conf_theme_color_yellow="#e3d18a"
-tmux_conf_theme_color_blue="#82aaff"
-tmux_conf_theme_color_magenta="#c792ea"
-tmux_conf_theme_color_cyan="#7fdbca"
-tmux_conf_theme_color_white="#a1aab8"
+tmux_conf_theme_color_black="#181825"
+tmux_conf_theme_color_black4="#585b70"
+tmux_conf_theme_color_gray="#313244"
+tmux_conf_theme_color_red="#f38ba8"
+tmux_conf_theme_color_green="#a6e3a1"
+tmux_conf_theme_color_yellow="#f9e2af"
+tmux_conf_theme_color_blue="#89b4fa"
+tmux_conf_theme_color_orange="#fab387"
+tmux_conf_theme_color_magenta="#cba6f7"
+tmux_conf_theme_color_cyan="#89dceb"
+tmux_conf_theme_color_white="#d6deeb"
 
 # Bright colors
 tmux_conf_theme_color_black_bright="#7c8f8f"
@@ -88,7 +90,6 @@ tmux_conf_theme_color_blue_bright="#82aaff"
 tmux_conf_theme_color_magenta_bright="#ae81ff"
 tmux_conf_theme_color_cyan_bright="#7fdbca"
 tmux_conf_theme_color_white_bright="#d6deeb"
-# --- end nightfy theme
 
 # --- default theme
 # tmux_conf_theme_colour_1="#121212"    # dark gray
