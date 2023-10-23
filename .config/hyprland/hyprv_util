@@ -79,7 +79,7 @@ switch_version() {
 		swww img $SET_BG --transition-fps 60 --transition-type wipe --transition-duration 2
 	fi
 
-	#update the sddm image
+	# update the sddm image
 	cp -f ~/.config/hyprland/backgrounds/$VERTO'background'$SWITCHTO.jpg /usr/share/sddm/themes/sdt/wallpaper.jpg
 
 }
@@ -100,7 +100,7 @@ setbg)
 	restart_waybar
 	;;
 sync-back)
-	rsync -au "$HOME/.config/hypr" "$HOME/.dotfiles/.config/hyprland"
+	rsync -au "$HOME/.config/hyprland" "$HOME/.dotfiles/.config"
 	exit
 	;;
 swkb)

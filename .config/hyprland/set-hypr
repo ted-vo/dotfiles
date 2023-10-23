@@ -297,7 +297,7 @@ post_install() {
 
 		# Setup each application
 		# check for existing config folders and backup
-		for DIR in hypr kitty mako swaylock waybar wlogout wofi; do
+		for DIR in kitty mako swaylock waybar wlogout wofi; do
 			DIRPATH="$HOME/.config/$DIR"
 			if [ -d "$DIRPATH" ]; then
 				echo -e "$CAT - Config for $DIR located, backing up."
@@ -311,7 +311,7 @@ post_install() {
 
 		# link up the config files
 		echo -e "$CNT - Setting up the new config..."
-		rsync -au "$HOME/.config/hyprland/hypr" "$HOME/.config"
+		ln -sf "$HOME/.config/hyprland/hypr" "$HOME/.config"
 		ln -sf "$HOME/.config/hyprland/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
 		ln -sf "$HOME/.config/hyprland/mako/conf/config-dark" "$HOME/.config/mako/config"
 		ln -sf "$HOME/.config/hyprland/swaylock/config" "$HOME/.config/swaylock/config"
@@ -330,7 +330,7 @@ post_install() {
 		echo -e "$CNT - Setting up the login screen."
 		sudo rsync -au Extras/sdt /usr/share/sddm/themes
 		sudo chown -R $USER:$USER /usr/share/sddm/themes/sdt
-		sudo mkdir /etc/sddm.conf.d
+		test -d "/etc/sddm.conf.d" || sudo mkdir /etc/sddm.conf.d
 		echo -e "[Theme]\nCurrent=sdt" | sudo tee -a /etc/sddm.conf.d/10-theme.conf &>>$INSTLOG
 		WLDIR=/usr/share/wayland-sessions
 		if [ -d "$WLDIR" ]; then
