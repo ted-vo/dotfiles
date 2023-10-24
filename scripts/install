@@ -112,6 +112,9 @@ all() {
 	alacritty &
 	show_progress "${White}  alacritty" $!
 
+	zsh &
+	show_progress "${White}  ZSH config" $!
+
 	gitconfig &
 	show_progress "${White}  gitconfig" $!
 
