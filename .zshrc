@@ -67,6 +67,12 @@ case ":$PATH:" in
   *) export PATH="$DOTFILES_HOME/bin:$PATH" ;;
 esac
 
+# --- alias
+. "$HOME/.dotfiles/.aliases"
+
+# --- functions
+. "$HOME/.dotfiles/.functions"
+
 # --- ibus configure
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
