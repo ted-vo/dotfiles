@@ -123,6 +123,8 @@ all() {
 
 	nvim &
 	show_progress "${White}  neovim" $!
+
+	sh $BIN_DIR/modern-unix install
 }
 
 main() {
