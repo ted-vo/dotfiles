@@ -24,6 +24,7 @@ k9s:
         active: all
         lockFavorites: false
         favorites:
+        - user-service
         - sports-betting-service
         - authentication-service
         - all
@@ -32,7 +33,6 @@ k9s:
         - mega645-service
         - game-history-service
         - notification-service
-        - inhouse-game-service
       view:
         active: pod
       featureGates:
