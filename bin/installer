@@ -15,10 +15,10 @@ show_progress() {
 
 # function that will test for a package and if not found it will attempt to install it
 install_software() {
-	if yay -v >/dev/null; then
-		arch_linux
+	if which yay >/dev/null; then
+		arch_linux $@
 	else
-		ubuntu
+		ubuntu $@
 	fi
 }
 

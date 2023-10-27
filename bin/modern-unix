@@ -22,8 +22,8 @@ If you are worried about entering your password then you may want to review the 
 }
 
 install() {
+	echo -e "${White}  modern_unix"
 	sudo_warning
-	echo "  Install modern_unix"
 	sudo touch /tmp/dotfiles.tmp
 	for SHELL in ${modern_unix[@]}; do
 		install_software $SHELL
