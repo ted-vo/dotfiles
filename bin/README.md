@@ -62,6 +62,7 @@ cert-gen root -n ABC Company
 # with abc.crt and abc.key are result of cert-gen root
 ./cert-gen service -d xyz.abc.com -ca abc.crt -ca-key abc.key
 ```
+
 </detail>
 
 <detail>
@@ -82,6 +83,7 @@ flags:
   -p, --port                port local for forwarding
 
 ```
+
 </detail>
 
 <detail>
@@ -135,4 +137,17 @@ Flags:
   -o, --output-dir=DIR      specify a directory to store output in. Default is current directory.
 
 ```
+
 </detail>
+
+```
+ Options	 Description
+ -n	 do not print the trailing newline.
+ -e	 enable interpretation of backslash escapes.
+ \b	 backspace
+ \\	 backslash
+ \n	 new line
+ \r	 carriage return
+ \t	 horizontal tab
+ \v	 vertical tab
+```
