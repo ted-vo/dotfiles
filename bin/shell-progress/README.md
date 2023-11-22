@@ -2,7 +2,7 @@
 
 Display an awesome 'spinner' while running your long shell commands.
 
-Do *NOT* call `_spinner` function directly. Use `{start,stop}_spinner` wrapper functions
+Do _NOT_ call `_spinner` function directly. Use `{start,stop}_spinner` wrapper functions
 
 ## Usage
 
@@ -16,3 +16,5 @@ Also see: `test.sh`
 ## Source
 
 https://github.com/tlatsas/bash-spinner and https://github.com/tlatsas/bash-spinner/pull/3/files
+
+https://coolsymbol.com/
