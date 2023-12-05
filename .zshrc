@@ -114,3 +114,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # --- Load local -------------------
 [ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
