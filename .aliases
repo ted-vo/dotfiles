@@ -8,8 +8,13 @@ alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
 alias chmox='chmod -x'
-alias chmoax='chmod -x'
+alias chmoax='chmod +x'
 
 alias brwe=brew  #typos
 
 alias hosts='sudo $EDITOR /etc/hosts'
+
+alias data='cd ~/data'
+alias ilt-be='cd ~/data/io.inspirelab/backend'
+alias ilt-fe='cd ~/data/io.inspirelab/frontend'
+alias ilt-sre='cd ~/data/io.inspirelab/gitops'
