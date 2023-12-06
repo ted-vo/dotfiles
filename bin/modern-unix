@@ -12,6 +12,7 @@ modern_unix=(
 	jq        # json processor
 	dog       # DNS lookup
 	xh        # http requets tools written in Rust
+	bat       # A cat(1) clone with syntax highlighting and Git integration
 )
 
 sudo_warning() {
