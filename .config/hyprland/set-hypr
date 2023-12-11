@@ -65,7 +65,7 @@ install_stage=(
 	mako                        # This is a graphical notification daemon
 	waybar                      # This is a fork of waybar with Hyprland workspace support
 	swww                        # This is used to set a desktop background image
-	swaylock-effects            # This allows for the locking of the desktop its a fork that adds some editional visual effects
+	swaylock-effects-git        # This allows for the locking of the desktop its a fork that adds some editional visual effects
 	wofi                        # This is an application launcher menu
 	wlogout                     # This is a logout menu that allows for shutdown, reboot and sleep
 	xdg-desktop-portal-hyprland # xdg-desktop-portal backend for hyprland
