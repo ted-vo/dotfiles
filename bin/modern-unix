@@ -13,6 +13,8 @@ modern_unix=(
 	dog       # DNS lookup
 	xh        # http requets tools written in Rust
 	bat       # A cat(1) clone with syntax highlighting and Git integration
+	lsd       # next-gen ls command
+	gping     # ping with graph
 )
 
 sudo_warning() {
