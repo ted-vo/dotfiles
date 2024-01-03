@@ -1,13 +1,21 @@
 k9s:
+  liveViewAutoRefresh: false
   refreshRate: 2
   maxConnRetry: 5
   enableMouse: false
+  enableImageScan: false
   headless: false
   logoless: false
   crumbsless: false
   readOnly: false
   noExitOnCtrlC: false
   noIcons: false
+  shellPod:
+    image: busybox:1.35.0
+    namespace: default
+    limits:
+      cpu: 100m
+      memory: 100Mi
   skipLatestRevCheck: false
   logger:
     tail: 100
@@ -18,34 +26,26 @@ k9s:
     showTime: false
   currentContext: gke_athena-ilt_asia-southeast1-a_dev-gke-game-portal-cluster-ase1
   currentCluster: gke_athena-ilt_asia-southeast1-a_dev-gke-game-portal-cluster-ase1
+  keepMissingClusters: false
   clusters:
     gke_athena-ilt_asia-southeast1-a_dev-gke-game-portal-cluster-ase1:
       namespace:
         active: all
         lockFavorites: false
         favorites:
-        - user-service
-        - sports-betting-service
-        - authentication-service
+        - preload-cache-service
+        - statistics-service
+        - game-cms-service
+        - user-cms-service
+        - ci-runner
         - all
-        - kube-system
-        - lottery-service
-        - mega645-service
-        - game-history-service
-        - notification-service
+        - authentication-service
+        - user-service
+        - api-service
       view:
-        active: pod
+        active: po
       featureGates:
         nodeShell: false
-      shellPod:
-        image: busybox:1.35.0
-        command: []
-        args: []
-        namespace: default
-        limits:
-          cpu: 100m
-          memory: 100Mi
-        labels: {}
       portForwardAddress: localhost
   thresholds:
     cpu:
@@ -55,3 +55,4 @@ k9s:
       critical: 90
       warn: 70
   screenDumpDir: /tmp/k9s-screens-ted
+  disablePodCounting: false
