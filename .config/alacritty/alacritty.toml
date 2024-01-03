@@ -1,0 +1,41 @@
+import = [
+  # uncomment the flavour you want below:
+  # "~/.config/alacritty/catppuccin-mocha.toml"
+  "~/.config/alacritty/catppuccin-macchiato.toml"
+  # "~/.config/alacritty/catppuccin-frappe.toml"
+  # "~/.config/alacritty/catppuccin-latte.toml"
+]
+
+live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "Full"
+title = "tedvo.dev"
+dynamic_title = true
+# dynamic_padding = true
+# opacity = 0.0
+  [window.padding]
+  x = 2
+  y = 2
+
+[font]
+size = 12
+
+  [font.normal]
+  family = "JetBrainsMono Nerd Font"
+  style = "Regular"
+
+  [font.bold]
+  family = "JetBrainsMono Nerd Font"
+  style = "Bold"
+
+  [font.italic]
+  family = "JetBrainsMono Nerd Font"
+  style = "Italic"
+
+  [font.bold_italic]
+  family = "JetBrainsMono Nerd Font"
+  style = "Bold Italic"
