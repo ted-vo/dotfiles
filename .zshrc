@@ -112,6 +112,10 @@ esac
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# ---- Flutter ---------------------
+export FLUTTER_HOME="$HOME/.flutter"
+export PATH="$FLUTTER_HOME/bin:$PATH:"
+
 # --- Load local -------------------
 [ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
 
