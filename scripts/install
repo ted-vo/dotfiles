@@ -86,8 +86,7 @@ alacritty() {
 		sudo update-desktop-database
 	fi
 
-	test -d "$HOME/.config/alacritty" || mkdir -p "$HOME/.config/alacritty"
-	safelink "$ROOT_DIR/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+	safelink "$ROOT_DIR/.config/alacritty" "$HOME/.config/alacritty"
 }
 
 gitconfig() {
