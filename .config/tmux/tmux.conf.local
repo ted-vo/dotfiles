@@ -2,7 +2,8 @@
 # https://github.com/gpakosz/.tmux
 # (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license, without any warranty.
 #         Copyright 2012— Gregory Pakosz (@gpakosz).
-set -ga terminal-overrides ',xterm-256color:Tc'
+set -g default-terminal "xterm-256color"
+set-option -ga terminal-overrides ",xterm-256color:Tc"
 
 # -- session creation ------------------------- --------------------------------
 
@@ -364,8 +365,8 @@ tmux_conf_copy_to_os_clipboard=true
 #set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
+set -gu prefix2
+unbind C-a
 # unbind C-b
 # set -g prefix C-a
 # bind C-a send-prefix
@@ -443,12 +444,16 @@ tmux_conf_uninstall_plugins_on_reload=true
 #set -g @continuum-restore 'on'
 
 set -g @plugin 'ted-vo/tmux-bitwarden'
+set -g @plugin 'Morantron/tmux-fingers'
 
 # -- custom variables ----------------------------------------------------------
 
 # bitwarden
 set -g @bw-copy-to-clipboard 'off'
 set -g @bw-session "$BW_SESSION"
+
+# tmux-fingers
+set -g @fingers-key F
 
 # to define a custom #{foo} variable, define a POSIX shell function between the
 # '# EOF' and the '# "$@"' lines. Please note that the opening brace { character
