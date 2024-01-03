@@ -35,7 +35,7 @@ whichlink() {
 }
 
 # git commit browser. needs fzf. ctrl-m to view commit.
-log() {
+glogi() {
 	git log --graph --color=always \
 		--format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
 		fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` \
