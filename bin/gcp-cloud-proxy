@@ -8,7 +8,7 @@ set -euo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 OS_ARCH=$(uname | tr '[:upper:]' '[:lower:]')
 BIN_PATH=/usr/local/bin
-CLOUD_SQL_PROXY=$BIN_PATH/cloud_sql_proxy
+CLOUD_SQL_PROXY=$BIN_PATH/cloud-sql-proxy
 ICON_PASSED='\e[1;32m√\e[0m'
 ICON_ERROR='\e[1;31mx\e[0m'
 
@@ -24,6 +24,8 @@ global_help() {
 	echo ""
 	echo "Flags:"
 	echo "  -h, --help                show brief help"
+	echo "  -i, --install             install cloud-sql-proxy"
+	echo "  -u, --upgrade             upgrade cloud-sql-proxy"
 	echo "  -c, --connection-name     projectID:region:instanceID"
 	echo "  -p, --port                port local for forwarding"
 	exit 0
@@ -37,17 +39,25 @@ failure() {
 	echo -e "$ICON_ERROR $1"
 }
 
+FORCE_INSTALL=''
 install() {
+	echo "---------------"
 	echo "Cloud SQL Proxy"
 	echo "---------------"
-	if cloud_sql_proxy -version &>/dev/null; then
-		pass "installed"
+	if [[ -z $FORCE_INSTALL && $(cloud_sql_proxy -version &>/dev/null || echo $?) -eq 0 ]]; then
+		pass "installed :: cloud_sql_proxy is outdated. Please run './gcp-cloud-proxy upgrade' to upgrade."
+	elif [[ -z $FORCE_INSTALL && $(cloud-sql-proxy -v &>/dev/null || echo $?) -eq 0 ]]; then
+		pass "installed :: cloud-sql-proxy is updated"
 	else
 		echo "Downloading Cloud SQL Auth proxy client..."
 		if [[ $OS_ARCH == "darwin" ]]; then
-			curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
+			if [[ $(uname -m) == 'arm64' ]]; then
+				curl -o $CLOUD_SQL_PROXY https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.1/cloud-sql-proxy.darwin.arm64
+			else
+				curl -o $CLOUD_SQL_PROXY https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
+			fi
 		elif [[ $OS_ARCH == "linux" ]]; then
-			wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O $CLOUD_SQL_PROXY
+			curl -o $CLOUD_SQL_PROXY https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.1/cloud-sql-proxy.linux.amd64
 		fi
 
 		echo " Grant execute permission"
@@ -74,13 +84,26 @@ connect_database() {
 	if [[ -z $PORT ]]; then
 		PORT=3306
 	fi
-	echo ""
-	echo "-----------------------------------------------------------"
-	echo " Running with $(cloud_sql_proxy -version)"
-	echo " Host: localhost"
-	echo " Port: $PORT"
-	echo "-----------------------------------------------------------"
-	cloud_sql_proxy -instances="$1"=tcp:"$PORT" "-ip_address_types=PRIVATE"
+
+	if [[ $(cloud_sql_proxy -version &>/dev/null || echo $?) -eq 0 ]]; then
+		echo ""
+		echo "-----------------------------------------------------------"
+		echo " Running with $(cloud_sql_proxy -version)"
+		echo " Host: localhost"
+		echo " Port: $PORT"
+		echo "-----------------------------------------------------------"
+		cloud_sql_proxy -instances="$1"=tcp:"$PORT" "-ip_address_types=PRIVATE"
+	elif [[ $(cloud-sql-proxy -v &>/dev/null || echo $?) -eq 0 ]]; then
+		echo ""
+		echo "-----------------------------------------------------------"
+		echo " Running with $(cloud-sql-proxy -v)"
+		echo " Host: localhost"
+		echo " Port: $PORT"
+		echo "-----------------------------------------------------------"
+		cloud-sql-proxy "$1" -a 127.0.0.1 -p "$PORT" --private-ip
+	else
+		echo "Abort :: cloud-sql-proxy shell not installed. To istall run: 'gcp-cloud-proxy install'"
+	fi
 }
 
 selection_mode() {
@@ -129,8 +152,13 @@ while test $# -gt 0; do
 		PORT=$1
 		shift
 		;;
-	install)
-		"$@"
+	-u | --upgrade)
+		FORCE_INSTALL=true
+		install "$@"
+		exit
+		;;
+	-i | --install)
+		install "$@"
 		exit
 		;;
 	*)
@@ -142,7 +170,7 @@ while test $# -gt 0; do
 done
 
 main() {
-	if [ -z "$CONNECTION_NAME" ]; then
+	if [[ -z "$CONNECTION_NAME" ]]; then
 		selection_mode
 	else
 		connect_database "$CONNECTION_NAME"
