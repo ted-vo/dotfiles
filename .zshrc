@@ -121,3 +121,5 @@ export PATH="$FLUTTER_HOME/bin:$PATH:"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
