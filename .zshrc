@@ -21,6 +21,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 zinit light ohmyzsh/ohmyzsh
 zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::aws
@@ -42,7 +43,7 @@ export LC_ALL=en_US.UTF-8
 # ----- Post ---------------------------------------------
 #
 
-source <(kubectl completion zsh)
+[[ $(kubectl version &>/dev/null) ]] && source <(kubectl completion zsh)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -76,6 +77,8 @@ esac
 # --- ibus configure
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
+export QT4_IM_MODULE=ibus
+export CLUTTER_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 
