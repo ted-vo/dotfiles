@@ -7,6 +7,7 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
+# file excution
 alias chmox='chmod -x'
 alias chmoax='chmod +x'
 
@@ -14,6 +15,10 @@ alias brwe=brew  #typos
 
 alias hosts='sudo $EDITOR /etc/hosts'
 
+# docker
+alias docker-start='systemctl start docker.service'
+
+# workspace
 alias data='cd ~/data'
 alias ilt-be='cd ~/data/io.inspirelab/backend'
 alias ilt-fe='cd ~/data/io.inspirelab/frontend'
