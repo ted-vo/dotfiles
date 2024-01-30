@@ -108,6 +108,8 @@ nvim() {
 }
 
 all() {
+	exec "$BIN_DIR/shells-for-work" install
+
 	alacritty &
 	show_progress "${White}  alacritty" $!
 
@@ -122,8 +124,6 @@ all() {
 
 	nvim &
 	show_progress "${White}  neovim" $!
-
-	modern-unix install
 }
 
 main() {
