@@ -1,3 +1,6 @@
+autoload -Uz compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
 #
 # ----- Pre ---------------------------------------------
 #
@@ -11,30 +14,29 @@ fi
 
 export PATH="/usr/local/bin:/usr/bin"
 
-# ZShell plugin manager
-autoload -Uz compinit && compinit
-
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-zinit light ohmyzsh/ohmyzsh
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zi ice depth=1
+zi light romkatv/powerlevel10k
+zi light zsh-users/zsh-completions
+zi light zsh-users/zsh-autosuggestions
+zi light zsh-users/zsh-syntax-highlighting
 
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
-zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
-zinit snippet OMZP::encode64
-zinit snippet OMZP::tmux
-zinit snippet OMZP::rust
-zinit snippet OMZP::command-not-found
+zi snippet OMZP::git
+zi snippet OMZP::sudo
+zi snippet OMZP::zsh-interactive-cd
+zi snippet OMZP::command-not-found
+zi snippet OMZP::tmux
 
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-syntax-highlighting
+zi snippet OMZP::docker
+zi snippet OMZP::aws
+zi snippet OMZP::encode64
+
+zi snippet OMZP::rust
+zi snippet OMZP::golang
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -42,8 +44,6 @@ export LC_ALL=en_US.UTF-8
 #
 # ----- Post ---------------------------------------------
 #
-
-[[ $(kubectl version &>/dev/null) ]] && source <(kubectl completion zsh)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -82,12 +82,15 @@ export CLUTTER_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 
-# --- Gcloud ------------------------ 
+# --- GCLoud CLI & K8S -------------
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
-
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
+source <(kubectl completion zsh)
+# install kubectl via gcloud component so we need to load kubectl/x snippet after knownlaged cli
+zi snippet OMZP::kubectl
+zi snippet OMZP::kubectx
 
 # --- .asdf ------------------------
 . "$HOME/.asdf/asdf.sh"
@@ -119,10 +122,10 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export FLUTTER_HOME="$HOME/.flutter"
 export PATH="$FLUTTER_HOME/bin:$PATH:"
 
-# --- Load local -------------------
+# --- local -------------------
 [ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
 
-autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
