@@ -4,7 +4,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 source "$SCRIPT_DIR/installer"
 
-modern_unix=(
+shells=(
 	cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
 	duf       # Disk Usage/Free Utility
 	ripgrep   # Recursively searchs directories
@@ -15,6 +15,8 @@ modern_unix=(
 	bat       # A cat(1) clone with syntax highlighting and Git integration
 	lsd       # next-gen ls command
 	gping     # ping with graph
+	k9s       # k8s tools
+	helm      # helm-chart cli
 )
 
 sudo_warning() {
@@ -25,17 +27,17 @@ If you are worried about entering your password then you may want to review the 
 }
 
 install() {
-	echo -e "${White}  modern_unix"
+	echo -e "${White}  shells"
 	sudo_warning
 	sudo touch /tmp/dotfiles.tmp
-	for SHELL in ${modern_unix[@]}; do
+	for SHELL in ${shells[@]}; do
 		install_software $SHELL
 	done
 }
 
 help_ls() {
 	echo -e "$CNT Checking list of modern unix.\n"
-	for SHELL in ${modern_unix[@]}; do
+	for SHELL in ${shells[@]}; do
 		if yay -Q $SHELL &>>/dev/null; then
 			echo -e "\e[1A\e[K$COK - $SHELL was installed."
 		else
