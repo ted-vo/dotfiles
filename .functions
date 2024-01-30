@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# archlinux system update
+function sysu() {
+	yay -Suy
+}
+
 # create a new directory and jump to it
 function md() {
 	mkdir -p "$@" && cd "$@"
