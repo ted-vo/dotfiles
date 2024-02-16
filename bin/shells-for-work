@@ -17,6 +17,7 @@ shells=(
 	gping     # ping with graph
 	k9s       # k8s tools
 	helm      # helm-chart cli
+	hurl-bin  # humman command-line tools runs HTTP requests definded in a simple plaint text format
 )
 
 sudo_warning() {
