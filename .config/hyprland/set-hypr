@@ -74,6 +74,7 @@ install_stage=(
 	slurp                       # This helps with screenshots, it selects a region in a Wayland compositor
 	thunar                      # GUID file manager
 	btop                        # Activities manager
+	wlsunset                    # wayland sunset aka filter blue light
 
 	google-chrome # Browser
 	firefox       # Browser
