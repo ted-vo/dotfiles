@@ -31,6 +31,7 @@ zi snippet OMZP::sudo
 zi snippet OMZP::zsh-interactive-cd
 zi snippet OMZP::command-not-found
 zi snippet OMZP::tmux
+zi snippet OMZP::web-search
 
 zi snippet OMZP::docker
 zi snippet OMZP::aws
