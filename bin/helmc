@@ -111,7 +111,8 @@ build() {
 	while test $# -gt 0; do
 		case "$1" in
 		-h | --help)
-			build_help
+			usage_build
+			exit
 			;;
 		-c)
 			shift
@@ -174,6 +175,7 @@ publish() {
 		case "$1" in
 		-h | --help)
 			usage_publish
+			exit
 			;;
 		-c)
 			shift
