@@ -76,6 +76,9 @@ esac
 # --- functions
 . "$HOME/.dotfiles/.functions"
 
+# --- k8s functions
+. "$HOME/.dotfiles/.k8s"
+
 # --- ibus configure
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
