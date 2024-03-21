@@ -453,6 +453,9 @@ set -g @plugin 'Morantron/tmux-fingers'
 set -g @bw-copy-to-clipboard 'off'
 set -g @bw-session "$BW_SESSION"
 
+# password-stored
+# set -g @pass-copy-to-clipboard 'off'
+
 # tmux-fingers
 set -g @fingers-key F
 
