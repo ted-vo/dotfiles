@@ -44,7 +44,7 @@ install() {
 help_ls() {
 	echo -e "$CNT [$OS] Checking list of modern unix.\n"
 	for SHELL in ${shells[@]}; do
-		if [[ $OS == 'darwin' ]]; then
+		if [[ $OS == 'osx' ]]; then
 			if brew list $SHELL &>/dev/null; then
 				echo -e "\033[1A\033[K$COK - $SHELL was installed."
 			else
