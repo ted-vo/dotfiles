@@ -84,14 +84,14 @@ export QT_IM_MODULE=ibus
 export QT4_IM_MODULE=ibus
 export CLUTTER_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
-[ $(which ibus-daemon) ] && (pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr)
+[[ -a ibus-daemon ]] && (pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr)
 
 # --- GCLoud CLI & K8S -------------
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
-source <(kubectl completion zsh)
+[[ -a kubectl ]] && . <(kubectl completion zsh)
 # install kubectl via gcloud component so we need to load kubectl/x snippet after knownlaged cli
 zi snippet OMZP::kubectl
 zi snippet OMZP::kubectx
