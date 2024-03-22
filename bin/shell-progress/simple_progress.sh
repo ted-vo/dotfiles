@@ -33,7 +33,7 @@ show_progress() {
 	i=1
 	sp='▘▀▝▐▗▄▖▌'
 	delay=${SPINNER_DELAY:-0.15}
-	while ps | grep $pid &>/dev/null; do
+	while kill -0 $pid &>/dev/null; do
 		echo -en "\b${sp:$((i++ % ${#sp})):1}"
 		sleep "$delay"
 	done
