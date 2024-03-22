@@ -28,7 +28,7 @@ install_software() {
 		fi
 	fi
 
-	if [[ $OS == 'darwin' ]]; then
+	if [[ $OS == 'osx' ]]; then
 		macos $@
 	fi
 }
