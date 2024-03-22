@@ -24,15 +24,15 @@ install_software() {
 
 ubuntu() {
 	# First lets see if the package is there
-	if dpkg -s $1 &>>/dev/null; then
+	if dpkg -s $1 &>/dev/null; then
 		echo -e "$COK - $1 is already installed."
 	else
 		# no package found so installing
 		echo -en "$CNT - Now installing $1 ."
-		apt install -y $1 &>>$INSTLOG &
+		apt install -y $1 >>$INSTLOG 2>&1 &
 		show_progress $!
 		# test to make sure package installed
-		if dpkg -Q $1 &>>/dev/null; then
+		if dpkg -Q $1 &>/dev/null; then
 			echo -e "\e[1A\e[K$COK - $1 was installed."
 		else
 			# if this is hit then a package is missing, exit to review log
@@ -44,15 +44,15 @@ ubuntu() {
 
 arch_linux() {
 	# First lets see if the package is there
-	if yay -Q $1 &>>/dev/null; then
+	if yay -Q $1 &>/dev/null; then
 		echo -e "$COK - $1 is already installed."
 	else
 		# no package found so installing
 		echo -en "$CNT - Now installing $1 ."
-		yay -S --noconfirm $1 &>>$INSTLOG &
+		yay -S --noconfirm $1 >>$INSTLOG 2>&1 &
 		show_progress $!
 		# test to make sure package installed
-		if yay -Q $1 &>>/dev/null; then
+		if yay -Q $1 &>/dev/null; then
 			echo -e "\e[1A\e[K$COK - $1 was installed."
 		else
 			# if this is hit then a package is missing, exit to review log
