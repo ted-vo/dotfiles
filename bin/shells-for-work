@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+if [ "$OS" == "darwin" ]; then
+	OS="osx"
+fi
+ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 source "$SCRIPT_DIR/installer"
 
@@ -37,7 +42,7 @@ install() {
 }
 
 help_ls() {
-	echo -e "$CNT Checking list of modern unix.\n"
+	echo -e "$CNT [$OS] Checking list of modern unix.\n"
 	for SHELL in ${shells[@]}; do
 		if [[ $OS == 'darwin' ]]; then
 			if brew list $SHELL &>/dev/null; then
