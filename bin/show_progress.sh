@@ -18,11 +18,11 @@ anim_equas=(0.25 ≐ ≑ ≓ ≕ ≒ ≔)
 anim_semi_circle=(0.25 ◐ ◓ ◑ ◒)
 anim_braille_whitespace=(0.15 ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷)
 
-white="\e[1;37m"
-green="\e[1;32m"
-blue='\e[1;34m'
-red="\e[1;31m"
-nc="\e[0m"
+white="\033[1;37m"
+green="\033[1;32m"
+blue='\033[1;34m'
+red="\033[1;31m"
+nc="\033[0m"
 
 play_animation() {
 	local msg=$1
