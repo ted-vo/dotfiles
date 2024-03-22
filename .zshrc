@@ -84,7 +84,7 @@ export QT_IM_MODULE=ibus
 export QT4_IM_MODULE=ibus
 export CLUTTER_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
-pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
+[ $(which ibus-daemon) ] && (pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr)
 
 # --- GCLoud CLI & K8S -------------
 # The next line updates PATH for the Google Cloud SDK.
@@ -97,8 +97,8 @@ zi snippet OMZP::kubectl
 zi snippet OMZP::kubectx
 
 # --- .asdf ------------------------
-. "$HOME/.asdf/asdf.sh"
-. "$HOME/.asdf/completions/asdf.bash"
+[ -f "$HOME/.asdf/asdf.sh" ] && . "$HOME/.asdf/asdf.sh"
+[ -f "$HOME/.asdf/completions/asdf.bash" ] && . "$HOME/.asdf/completions/asdf.bash"
 
 # --- rust -------------------------
 export PATH="$HOME/.cargo/bin:$PATH" 
@@ -128,8 +128,3 @@ export PATH="$FLUTTER_HOME/bin:$PATH:"
 
 # --- local -------------------
 [ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
-
-complete -o nospace -C /usr/bin/terraform terraform
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
