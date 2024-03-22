@@ -40,10 +40,10 @@ help_ls() {
 	echo -e "$CNT Checking list of modern unix.\n"
 	for SHELL in ${shells[@]}; do
 		if yay -Q $SHELL &>/dev/null; then
-			echo -e "\033[1A\e[K$COK - $SHELL was installed."
+			echo -e "\033[1A\033[K$COK - $SHELL was installed."
 		else
 			# if this is hit then a package is missing, exit to review log
-			echo -e "\033[1A\e[K$CER - $SHELL not installed"
+			echo -e "\033[1A\033[K$CER - $SHELL not installed"
 		fi
 		echo ""
 	done
