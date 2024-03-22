@@ -1,7 +1,7 @@
 autoload -Uz compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
-export PATH="/usr/local/bin:/usr/bin"
+export PATH="/bin:/usr/local/bin:/usr/bin"
 
 # ----- Pre ---------------------------------------------
 #
