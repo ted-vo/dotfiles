@@ -41,7 +41,7 @@ play_animation() {
 
 	echo ""
 	echo -en "\r${color}∙ $msg... "
-	while ps | grep $pid &>/dev/null; do
+	while pgrep -P $pid &>/dev/null; do
 		for frame in "${frames[@]}"; do
 			echo -en "\r$color $frame $msg..."
 			sleep $delay
