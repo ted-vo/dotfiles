@@ -70,11 +70,11 @@ alacritty() {
 		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
 		test $ALACRITTY != 'y' && exit
 
-		git clone https://github.com/alacritty/alacritty.git &>>$INSTLOG
+		git clone https://github.com/alacritty/alacritty.git >>$INSTLOG 2>&1
 		cd alacritty
 
 		# libraries required
-		sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python &>>$INSTLOG
+		sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python >>$INSTLOG 2>&1
 
 		# check terminfo
 		test infocmp alacritty &>/dev/null || sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
@@ -95,16 +95,16 @@ gitconfig() {
 
 tmux() {
 	local tmux_path="$ROOT_DIR/.config/tmux"
-	test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" &>>$INSTLOG
-	cd "$tmux_path/oh-my-tmux" && git pull &>>$INSTLOG
+	test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" >>$INSTLOG 2>&1
+	cd "$tmux_path/oh-my-tmux" && git pull >>$INSTLOG 2>&1
 
 	safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$tmux_path/tmux.conf"
 	safelink "$tmux_path" "$HOME/.config/tmux"
 }
 
 nvim() {
-	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" &>>$INSTLOG
-	cd "$HOME/.config/nvim" && git pull origin main &>>$INSTLOG
+	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" >>$INSTLOG 2>&1
+	cd "$HOME/.config/nvim" && git pull origin main >>$INSTLOG 2>&1
 }
 
 all() {
