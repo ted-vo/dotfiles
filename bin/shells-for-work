@@ -39,11 +39,20 @@ install() {
 help_ls() {
 	echo -e "$CNT Checking list of modern unix.\n"
 	for SHELL in ${shells[@]}; do
-		if yay -Q $SHELL &>/dev/null; then
-			echo -e "\033[1A\033[K$COK - $SHELL was installed."
+		if [[ $OS == 'darwin' ]]; then
+			if brew list $SHELL &>/dev/null; then
+				echo -e "\033[1A\033[K$COK - $SHELL was installed."
+			else
+				# if this is hit then a package is missing, exit to review log
+				echo -e "\033[1A\033[K$CER - $SHELL not installed"
+			fi
 		else
-			# if this is hit then a package is missing, exit to review log
-			echo -e "\033[1A\033[K$CER - $SHELL not installed"
+			if yay -Q $SHELL &>/dev/null; then
+				echo -e "\033[1A\033[K$COK - $SHELL was installed."
+			else
+				# if this is hit then a package is missing, exit to review log
+				echo -e "\033[1A\033[K$CER - $SHELL not installed"
+			fi
 		fi
 		echo ""
 	done
