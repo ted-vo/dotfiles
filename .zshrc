@@ -84,7 +84,7 @@ export QT_IM_MODULE=ibus
 export QT4_IM_MODULE=ibus
 export CLUTTER_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
-[[ -a ibus-daemon ]] && (pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr)
+pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 
 # --- GCLoud CLI & K8S -------------
 # The next line updates PATH for the Google Cloud SDK.
