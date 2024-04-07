@@ -158,7 +158,7 @@ build() {
 	test "$chart_dir" || handle_error "Error: chart input path is empty" "build"
 
 	eval "$(parse_yaml "$chart_dir"/Chart.yaml)"
-	local V=${new_verion:=$version}
+	local V=${new_version:=$version}
 
 	echo "[Build] Chart packaging..."
 	echo "[Build] $(helm package "$chart_dir" -d "${output_dir:=$SCRIPT_DIR}" --version "$V")"
