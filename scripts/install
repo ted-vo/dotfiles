@@ -68,10 +68,10 @@ alacritty() {
 		sudo_warning
 		echo -e "$CAT - Alacritty not found"
 		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
-		test $ALACRITTY != 'y' && exit
+		test "$ALACRITTY" != 'y' && exit
 
 		git clone https://github.com/alacritty/alacritty.git >>$INSTLOG 2>&1
-		cd alacritty
+		cd alacritty || exit
 
 		# libraries required
 		sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python >>$INSTLOG 2>&1
@@ -108,7 +108,7 @@ nvim() {
 }
 
 all() {
-	exec "$BIN_DIR/shells-for-work" install
+	"$BIN_DIR/shells-for-work" install
 
 	alacritty &
 	show_progress "${White}  alacritty" $!
@@ -164,4 +164,4 @@ main() {
 	esac
 }
 
-main $@
+main "$@"
