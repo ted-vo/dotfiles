@@ -21,7 +21,7 @@
 
 ```bash
 yay -S hyprland kitty waybar \
-    swaybg swaylock-effects wofi wlogout mako thunar \
+    swaybg swaylock-effects wofi wlogout mako thunar tumbler \
     ttf-jetbrains-mono-nerd noto-fonts-emoji \
     polkit-gnome python-requests starship \
     swappy grim slurp pamixer brightnessctl gvfs \
