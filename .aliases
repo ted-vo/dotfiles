@@ -13,9 +13,11 @@ alias chmoax='chmod +x'
 
 alias brwe=brew  #typos
 
-alias hosts='sudo $EDITOR /etc/hosts'
+alias hosts='sudo $EDITOR /etc/hosts' # edit host
 
-$(which lsd &>/dev/null) && alias ls='lsd'
+$(which lsd &>/dev/null) && alias ls='lsd' # ls by nextgen
+$(which bat &>/dev/null) && alias cat='bat' # cat by nextgen
+$(which gping &>/dev/null) && alias ping='gping' # ping by nextgen
 
 # docker
 alias docker-start='systemctl start docker.service'
@@ -25,3 +27,4 @@ alias data='cd ~/data'
 alias ilt-be='cd ~/data/io.inspirelab/backend'
 alias ilt-fe='cd ~/data/io.inspirelab/frontend'
 alias ilt-sre='cd ~/data/io.inspirelab/gitops'
+alias mu0rs='cd ~/data/MUOrs/mu-ui'
