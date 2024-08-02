@@ -3,77 +3,78 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
-	OS="osx"
+  OS="osx"
 fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 source "$SCRIPT_DIR/installer"
 
 shells=(
-	cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
-	duf       # Disk Usage/Free Utility
-	ripgrep   # Recursively searchs directories
-	fzf       # fuzzy finder
-	jq        # json processor
-	dog       # DNS lookup
-	xh        # http requets tools written in Rust
-	bat       # A cat(1) clone with syntax highlighting and Git integration
-	lsd       # next-gen ls command
-	gping     # ping with graph
-	k9s       # k8s tools
-	helm      # helm-chart cli
-	hurl-bin  # humman command-line tools runs HTTP requests definded in a simple plaint text format
+  cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
+  duf       # Disk Usage/Free Utility
+  ripgrep   # Recursively searchs directories
+  fzf       # fuzzy finder
+  jq        # json processor
+  dog       # DNS lookup
+  xh        # http requets tools written in Rust
+  bat       # A cat(1) clone with syntax highlighting and Git integration
+  lsd       # next-gen ls command
+  gping     # ping with graph
+  k9s       # k8s tools
+  helm      # helm-chart cli
+  hurl-bin  # humman command-line tools runs HTTP requests definded in a simple plaint text format
+  glow      # Markdown dicovery and preview in terminal
 )
 
 sudo_warning() {
-	# let the user know that we will use sudo
-	echo -e "$CNT - This script will run some commands that require sudo. You will be prompted to enter your password.
+  # let the user know that we will use sudo
+  echo -e "$CNT - This script will run some commands that require sudo. You will be prompted to enter your password.
 If you are worried about entering your password then you may want to review the content of the script."
-	sleep 1
+  sleep 1
 }
 
 install() {
-	echo -e "${White}  shells"
-	sudo_warning
-	sudo touch /tmp/dotfiles.tmp
-	for SHELL in ${shells[@]}; do
-		install_software $SHELL
-	done
+  echo -e "${White}  shells"
+  sudo_warning
+  sudo touch /tmp/dotfiles.tmp
+  for SHELL in ${shells[@]}; do
+    install_software $SHELL
+  done
 }
 
 help_ls() {
-	echo -e "$CNT [$OS] Checking list of modern unix.\n"
-	for SHELL in ${shells[@]}; do
-		if [[ $OS == 'osx' ]]; then
-			if brew list $SHELL &>/dev/null; then
-				echo -e "\033[1A\033[K$COK - $SHELL was installed."
-			else
-				# if this is hit then a package is missing, exit to review log
-				echo -e "\033[1A\033[K$CER - $SHELL not installed"
-			fi
-		else
-			if yay -Q $SHELL &>/dev/null; then
-				echo -e "\033[1A\033[K$COK - $SHELL was installed."
-			else
-				# if this is hit then a package is missing, exit to review log
-				echo -e "\033[1A\033[K$CER - $SHELL not installed"
-			fi
-		fi
-		echo ""
-	done
+  echo -e "$CNT [$OS] Checking list of modern unix.\n"
+  for SHELL in ${shells[@]}; do
+    if [[ $OS == 'osx' ]]; then
+      if brew list $SHELL &>/dev/null; then
+        echo -e "\033[1A\033[K$COK - $SHELL was installed."
+      else
+        # if this is hit then a package is missing, exit to review log
+        echo -e "\033[1A\033[K$CER - $SHELL not installed"
+      fi
+    else
+      if yay -Q $SHELL &>/dev/null; then
+        echo -e "\033[1A\033[K$COK - $SHELL was installed."
+      else
+        # if this is hit then a package is missing, exit to review log
+        echo -e "\033[1A\033[K$CER - $SHELL not installed"
+      fi
+    fi
+    echo ""
+  done
 }
 
 main() {
-	case $1 in
-	install)
-		install
-		exit
-		;;
-	ls)
-		help_ls
-		exit
-		;;
-	esac
+  case $1 in
+  install)
+    install
+    exit
+    ;;
+  ls)
+    help_ls
+    exit
+    ;;
+  esac
 }
 
 main $@
