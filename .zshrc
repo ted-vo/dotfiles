@@ -79,7 +79,7 @@ esac
 . "$HOME/.dotfiles/.k8s"
 
 # --- ibus configure
-if $(which pacman &> /dev/null); then
+if $(which pacman &>/dev/null); then
   export GTK_IM_MODULE=ibus
   export QT_IM_MODULE=ibus
   export QT4_IM_MODULE=ibus
