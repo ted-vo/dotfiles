@@ -3,7 +3,7 @@
 ## OS
 - Linux (Arch) - Primary
 - MacOS - Secondary
-- Windown - Entertaiment Only
+- Windows - Entertaiment Only
 
 ## Keyboard 
 - Work: Solfe Keyboard [josefadamcik/SofleKeyboard](https://github.com/josefadamcik/SofleKeyboard) 
