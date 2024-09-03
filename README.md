@@ -31,6 +31,7 @@
   - [gcloud](https://cloud.google.com/sdk/gcloud)    # GCP CLI
   - [k9s](https://k9scli.io/)       # k8s tools
   - [helm](https://helm.sh/)      # helm-chart cli
+  - [popeye](https://github.com/derailed/popeye)    # 👀 A Kubernetes cluster resource sanitizer
 
 
 ## Tips & Trick 
