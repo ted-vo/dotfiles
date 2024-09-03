@@ -375,7 +375,7 @@ unbind C-a
 # bind c new-window -c '#{pane_current_path}' #!important
 
 # move status line to top
-set -g status-position top
+set -g status-position bot
 
 # nvim-tmux-navigation
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
