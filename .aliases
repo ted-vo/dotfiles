@@ -21,10 +21,3 @@ $(which gping &>/dev/null) && alias ping='gping' # ping by nextgen
 
 # docker
 alias docker-start='systemctl start docker.service'
-
-# workspace
-alias data='cd ~/data'
-alias ilt-be='cd ~/data/io.inspirelab/backend'
-alias ilt-fe='cd ~/data/io.inspirelab/frontend'
-alias ilt-sre='cd ~/data/io.inspirelab/gitops'
-alias mu0rs='cd ~/data/MUOrs/mu-ui'
