@@ -1,8 +1,6 @@
 {
   "clock": {
-    "format": "󱑂 {:%R -  %d/%m}",
-    "tooltip": true,
-    "tooltip-format": "{: :%d, %m}"
+    "format": "󱑂 {:%R -  %d/%m}"
   },
   "custom/weather": {
     //shows the current weather and forecast
