@@ -1,18 +1,17 @@
 {
   "clock": {
-    "format": "{:%H:%M}",
-    "tooltip-format": "{: %A, %e %B %Y}"
+    "format": "󱑂 {:%R -  %d/%m}",
+    "tooltip": true,
+    "tooltip-format": "{: :%d, %m}"
   },
-
   "custom/weather": {
     //shows the current weather and forecast
-    "tooltip" : true,
-    "format" : "{}",
-    "interval" : 30,
-    "exec" : "~/.config/hyprland/waybar/scripts/waybar-wttr-c.py",
-    "return-type" : "json"
+    "tooltip": true,
+    "format": "{}",
+    "interval": 30,
+    "exec": "~/.config/hyprland/waybar/scripts/waybar-wttr-c.py",
+    "return-type": "json"
   },
-
   "temperature": {
     "thermal-zone": 1,
     "format": "",
