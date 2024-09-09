@@ -70,6 +70,7 @@ tooltip label {
 #pulseaudio,
 #network,
 #tray,
+#bluetooth,
 #temperature,
 #workspaces,
 #backlight {
@@ -83,6 +84,8 @@ tooltip label {
 
 #tray,
 #custom-lock_screen,
+#network,
+#bluetooth,
 #temperature,
 #backlight,
 #custom-launch_wofi,
@@ -95,6 +98,7 @@ tooltip label {
 #workspaces,
 #pulseaudio.microphone,
 #battery,
+#bluetooth,
 #disk {
   border-radius: 0px 10px 10px 0px;
   margin-right: 10px;
