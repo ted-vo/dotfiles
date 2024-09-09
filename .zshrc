@@ -85,6 +85,7 @@ if $(which pacman &>/dev/null); then
   export QT4_IM_MODULE=ibus
   export CLUTTER_IM_MODULE=ibus
   export XMODIFIERS=@im=ibus
+  export GLFW_IM_MODULE=ibus
   pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
 fi
 
