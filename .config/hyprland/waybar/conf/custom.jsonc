@@ -1,0 +1,46 @@
+{
+  "custom/light_dark": {
+    "format": "󰐾",
+    "on-click": "~/.config/hyprland/waybar/scripts/baraction light",
+    "tooltip": false
+  },
+  "custom/launch_wofi": {
+    "format": "",
+    "on-click": "sh -c '(sleep 0.5s; wofi)' & disown",
+    "tooltip": false
+  },
+  "custom/lock_screen": {
+    "format": "",
+    "on-click": "sh -c '(sleep 0.5s; swaylock)' & disown",
+    "tooltip": false
+  },
+  "custom/power_btn": {
+    "format": "",
+    "on-click": "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown",
+    "tooltip": false
+  },
+  "custom/updates": {
+    "format": "{}",
+    "exec": "~/.config/hyprland/waybar/scripts/update-sys",
+    "on-click": "~/.config/hyprland/waybar/scripts/update-sys update",
+    "interval": 300,
+    "tooltip": true
+  },
+  "custom/myhyprv": {
+    //shows the current theme profile and switches to next on click
+    "exec": "~/.config/hyprland/hyprv_util",
+    "return-type": "json",
+    "interval": 30,
+    "format": "{}",
+    "on-click": "~/.config/hyprland/hyprv_util vswitch",
+    "tooltip": true
+  },
+  "custom/weather": {
+    //shows the current weather and forecast
+    "tooltip": true,
+    "format": "{}",
+    "interval": 30,
+    "exec": "~/.config/hyprland/waybar/scripts/waybar-wttr-c.py",
+    "return-type": "json"
+  }
+}
