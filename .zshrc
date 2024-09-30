@@ -50,6 +50,8 @@ export LC_ALL=en_US.UTF-8
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 alias vim=nvim
+alias lzg=lazygit
+alias lzd=lazydocker
 alias zshconfig="vim $HOME/.zshrc"
 alias ohmyzsh="vim $HOME/.oh-my-zsh"
 alias dotfilesconf="vim $HOME/.dotfiles"
