@@ -24,6 +24,12 @@ shells=(
   helm      # helm-chart cli
   hurl-bin  # humman command-line tools runs HTTP requests definded in a simple plaint text format
   glow      # Markdown dicovery and preview in terminal
+
+  # utilities
+  cmatrix
+  figlet
+  pipes.sh
+  nyancat
 )
 
 sudo_warning() {
