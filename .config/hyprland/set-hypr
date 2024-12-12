@@ -47,6 +47,7 @@ prep_stage=(
 
 	wget
 	unzip
+	fzf
 	zsh
 	rsync
 	neovim
