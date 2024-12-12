@@ -3,90 +3,92 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
-	OS="osx"
+  OS="osx"
 fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 source "$SCRIPT_DIR/colorized"
 
+INSTLOG="install.log"
+
 show_progress() {
-	while ps | grep $1 &>/dev/null; do
-		echo -n "."
-		sleep 2
-	done
-	echo -en "Done!\n"
-	sleep 2
+  while ps | grep $1 &>/dev/null; do
+    echo -n "."
+    sleep 2
+  done
+  echo -en "Done!\n"
+  sleep 2
 }
 
 # function that will test for a package and if not found it will attempt to install it
 install_software() {
-	if [[ $OS == 'linux' ]]; then
-		if which yay >/dev/null; then
-			arch_linux $@
-		else
-			ubuntu $@
-		fi
-	fi
+  if [[ $OS == 'linux' ]]; then
+    if which yay >/dev/null; then
+      arch_linux $@
+    else
+      ubuntu $@
+    fi
+  fi
 
-	if [[ $OS == 'osx' ]]; then
-		macos $@
-	fi
+  if [[ $OS == 'osx' ]]; then
+    macos $@
+  fi
 }
 
 macos() {
-	if brew list $1 &>/dev/null; then
-		echo -e "$COK - $1 is already installed."
-	else
-		echo -en "$CNT - Now installing $1 ."
-		brew install $1
-		show_progress $!
-		if brew list $1 &>/dev/null; then
-			echo -e "\033[1A\e[K$COK - $1 was installed."
-		else
-			# if this is hit then a package is missing, exit to review log
-			echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
-			exit
-		fi
+  if brew list $1 &>/dev/null; then
+    echo -e "$COK - $1 is already installed."
+  else
+    echo -en "$CNT - Now installing $1 ."
+    brew install $1
+    show_progress $!
+    if brew list $1 &>/dev/null; then
+      echo -e "\033[1A\e[K$COK - $1 was installed."
+    else
+      # if this is hit then a package is missing, exit to review log
+      echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
+      exit
+    fi
 
-	fi
+  fi
 }
 
 ubuntu() {
-	# First lets see if the package is there
-	if dpkg -s $1 &>/dev/null; then
-		echo -e "$COK - $1 is already installed."
-	else
-		# no package found so installing
-		echo -en "$CNT - Now installing $1 ."
-		apt install -y $1 >>$INSTLOG 2>&1 &
-		show_progress $!
-		# test to make sure package installed
-		if dpkg -Q $1 &>/dev/null; then
-			echo -e "\033[1A\e[K$COK - $1 was installed."
-		else
-			# if this is hit then a package is missing, exit to review log
-			echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
-			exit
-		fi
-	fi
+  # First lets see if the package is there
+  if dpkg -s $1 &>/dev/null; then
+    echo -e "$COK - $1 is already installed."
+  else
+    # no package found so installing
+    echo -en "$CNT - Now installing $1 ."
+    apt install -y $1 >>$INSTLOG 2>&1 &
+    show_progress $!
+    # test to make sure package installed
+    if dpkg -Q $1 &>/dev/null; then
+      echo -e "\033[1A\e[K$COK - $1 was installed."
+    else
+      # if this is hit then a package is missing, exit to review log
+      echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
+      exit
+    fi
+  fi
 }
 
 arch_linux() {
-	# First lets see if the package is there
-	if yay -Q $1 &>/dev/null; then
-		echo -e "$COK - $1 is already installed."
-	else
-		# no package found so installing
-		echo -en "$CNT - Now installing $1 ."
-		yay -S --noconfirm $1 >>$INSTLOG 2>&1 &
-		show_progress $!
-		# test to make sure package installed
-		if yay -Q $1 &>/dev/null; then
-			echo -e "\033[1A\e[K$COK - $1 was installed."
-		else
-			# if this is hit then a package is missing, exit to review log
-			echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
-			exit
-		fi
-	fi
+  # First lets see if the package is there
+  if yay -Q $1 &>/dev/null; then
+    echo -e "$COK - $1 is already installed."
+  else
+    # no package found so installing
+    echo -en "$CNT - Now installing $1 ."
+    yay -S --noconfirm $1 >>$INSTLOG 2>&1 &
+    show_progress $!
+    # test to make sure package installed
+    if yay -Q $1 &>/dev/null; then
+      echo -e "\033[1A\e[K$COK - $1 was installed."
+    else
+      # if this is hit then a package is missing, exit to review log
+      echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
+      exit
+    fi
+  fi
 }
