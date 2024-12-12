@@ -45,6 +45,8 @@ prep_stage=(
 	wireplumber # powerful session and policy manager for PipeWire
 	jq          # JSON
 
+	wget
+	unzip
 	zsh
 	rsync
 	neovim
