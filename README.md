@@ -1,5 +1,11 @@
 # My Weapon for Work
 
+## Install
+
+```
+curl -fsSL https://tedvo.dev/install | bash
+```
+
 ## OS
 - Linux (Arch) - Primary
 - MacOS - Secondary
