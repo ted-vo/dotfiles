@@ -48,6 +48,7 @@ prep_stage=(
 	zsh
 	rsync
 	neovim
+	tmux
 	ibus-deamon
 	
 	wl-clipboard
