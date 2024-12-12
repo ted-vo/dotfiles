@@ -10,6 +10,13 @@ ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 source "$SCRIPT_DIR/installer"
 
 shells=(
+  # required
+  rsync
+  wget
+  unzip
+  tmux
+  zsh
+
   cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
   duf       # Disk Usage/Free Utility
   ripgrep   # Recursively searchs directories

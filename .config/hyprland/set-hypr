@@ -43,7 +43,9 @@ prep_stage=(
 
   pipewire    # new low-level multimedia framework
   wireplumber # powerful session and policy manager for PipeWire
-  jq          # JSON
+
+  jq # JSON
+
   wl-clipboard
   cliphist
   python-requests # needed for the weather module script to execute
