@@ -44,6 +44,12 @@ prep_stage=(
 	pipewire    # new low-level multimedia framework
 	wireplumber # powerful session and policy manager for PipeWire
 	jq          # JSON
+
+	zsh
+	rsync
+	neovim
+	ibus-deamon
+	
 	wl-clipboard
 	cliphist
 	python-requests # needed for the weather module script to execute
@@ -101,7 +107,6 @@ install_stage=(
 
 	lxappearance   # used to set GTK theme
 	xfce4-settings # set of tools for xfce, needed to set GTK theme
-	nwg-look-bin   # GTK Setting
 	sddm           # Simple desktop display manager
 )
 
