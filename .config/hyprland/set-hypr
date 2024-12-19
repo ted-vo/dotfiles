@@ -45,7 +45,15 @@ prep_stage=(
   wireplumber # powerful session and policy manager for PipeWire
 
   jq # JSON
-  rsync
+  
+  wget
+	unzip
+	fzf
+	zsh
+	rsync
+	neovim
+	tmux
+	ibus-deamon
 
   wl-clipboard
   cliphist
