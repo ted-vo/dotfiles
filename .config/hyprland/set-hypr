@@ -45,6 +45,7 @@ prep_stage=(
   wireplumber # powerful session and policy manager for PipeWire
 
   jq # JSON
+  rsync
 
   wl-clipboard
   cliphist
