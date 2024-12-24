@@ -89,6 +89,7 @@ install_stage=(
   thunar                      # GUID file manager
   btop                        # Activities manager
   wlsunset                    # wayland sunset aka filter blue light
+  hyprland-qtutils            # Small bunch of utility application that hyprland might invoke. These are stuff like dialogs or popups
 
   google-chrome # Browser
   firefox       # Browser
