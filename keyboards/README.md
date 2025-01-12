@@ -52,3 +52,11 @@ qmk flash -kb sofle -km tedvo
 # error with arv-gcc > 11
 qmk flash -kb sofle -km tedvo -e AVR_CFLAGS="-Wno-array-bounds"
 ```
+
+Can not connect keyboard in Arch
+
+```
+# Create the following udev rule:
+# /etc/udev/rules.d/99-via.rules
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"
+```
