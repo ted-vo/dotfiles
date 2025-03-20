@@ -105,6 +105,9 @@ zi snippet OMZP::kubectx
 [ -f "$HOME/.asdf/asdf.sh" ] && . "$HOME/.asdf/asdf.sh"
 [ -f "$HOME/.asdf/completions/asdf.bash" ] && . "$HOME/.asdf/completions/asdf.bash"
 
+export ASDF_DATA_DIR="$HOME/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+
 # --- rust -------------------------
 export PATH="$HOME/.cargo/bin:$PATH" 
 
