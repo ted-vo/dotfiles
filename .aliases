@@ -21,3 +21,6 @@ $(which gping &>/dev/null) && alias ping='gping' # ping by nextgen
 
 # docker
 alias docker-start='systemctl start docker.service'
+
+# yazi
+alias y=yazi
