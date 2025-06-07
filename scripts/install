@@ -10,158 +10,150 @@ source "$BIN_DIR/shell-progress/simple_progress.sh"
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
-	OS="osx"
+  OS="osx"
 fi
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 INSTLOG="install.log"
 
 info() {
-	echo -e "${White}$@ ${Color_Off}"
+  echo -e "${White}$@ ${Color_Off}"
 }
 
 info_bold() {
-	echo -e "${Bold_White}$@ ${Color_Off}"
+  echo -e "${Bold_White}$@ ${Color_Off}"
 }
 
 debug_msg() {
-	echo "$@" >&2
+  echo "$@" >&2
 }
 
 sudo_warning() {
-	# let the user know that we will use sudo
-	echo -e "$CNT - This script will run some commands that require sudo. You will be prompted to enter your password.
+  # let the user know that we will use sudo
+  echo -e "$CNT - This script will run some commands that require sudo. You will be prompted to enter your password.
 If you are worried about entering your password then you may want to review the content of the script."
-	sleep 1
+  sleep 1
 }
 
 safelink() {
-	DOTFILE="$1"
-	CONFIG="$2"
+  DOTFILE="$1"
+  CONFIG="$2"
 
-	# Continue if the link already exists
-	if [[ -L "$CONFIG" && "$DOTFILE" = "$(readlink "$CONFIG")" ]]; then
-		# debug_msg "link $CONFIG -> $DOTFILE is already set up."
-		return
-	fi
+  # Continue if the link already exists
+  if [[ -L "$CONFIG" && "$DOTFILE" = "$(readlink "$CONFIG")" ]]; then
+    # debug_msg "link $CONFIG -> $DOTFILE is already set up."
+    return
+  fi
 
-	# Back up any existing configuration.
-	if [[ -e "$CONFIG" ]]; then
-		local BACKUP
-		BACKUP="$CONFIG.dotfiles-backup.$(date '+%Y%m%d-%H%M%S')"
-		mv "$CONFIG" "$BACKUP"
-		# debug_msg "Backed up $CONFIG to $BACKUP"
-	fi
+  # Back up any existing configuration.
+  if [[ -e "$CONFIG" ]]; then
+    local BACKUP
+    BACKUP="$CONFIG.dotfiles-backup.$(date '+%Y%m%d-%H%M%S')"
+    mv "$CONFIG" "$BACKUP"
+    # debug_msg "Backed up $CONFIG to $BACKUP"
+  fi
 
-	# Write the link
-	mkdir -p "$(dirname "$CONFIG")"
-	ln -fs "$DOTFILE" "$CONFIG"
+  # Write the link
+  mkdir -p "$(dirname "$CONFIG")"
+  ln -fs "$DOTFILE" "$CONFIG"
 }
 
 zsh() {
-	safelink "$ROOT_DIR/.zshrc" "$HOME/.zshrc"
+  safelink "$ROOT_DIR/.zshrc" "$HOME/.zshrc"
 }
 
 alacritty() {
-	# local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
-	if [[ $OS == 'linux' ]] && ! which alacritty &>/dev/null; then
-		sudo_warning
-		echo -e "$CAT - Alacritty not found"
-		read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
-		test "$ALACRITTY" != 'y' && exit
+  # local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
+  if [[ $OS == 'linux' ]] && ! which alacritty &>/dev/null; then
+    sudo_warning
+    echo -e "$CAT - Alacritty not found"
+    read -rep $'[\e[1;33mACTION\e[0m] Would you like to install Alacritty? (y|n)' ALACRITTY
+    test "$ALACRITTY" != 'y' && exit
 
-		git clone https://github.com/alacritty/alacritty.git >>$INSTLOG 2>&1
-		cd alacritty || exit
+    git clone https://github.com/alacritty/alacritty.git >>$INSTLOG 2>&1
+    cd alacritty || exit
 
-		# libraries required
-		sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python >>$INSTLOG 2>&1
+    # libraries required
+    sudo pacman -Sy cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python >>$INSTLOG 2>&1
 
-		# check terminfo
-		test infocmp alacritty &>/dev/null || sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+    # check terminfo
+    test infocmp alacritty &>/dev/null || sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
 
-		# use artifact
-		sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
-		sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-		sudo desktop-file-install extra/linux/Alacritty.desktop
-		sudo update-desktop-database
-	fi
+    # use artifact
+    sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
+    sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+    sudo desktop-file-install extra/linux/Alacritty.desktop
+    sudo update-desktop-database
+  fi
 
-	safelink "$ROOT_DIR/.config/alacritty" "$HOME/.config/alacritty"
+  safelink "$ROOT_DIR/.config/alacritty" "$HOME/.config/alacritty"
 }
 
 gitconfig() {
-	safelink "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
+  safelink "$ROOT_DIR/git/.gitconfig" "$HOME/.gitconfig"
 }
 
 tmux() {
-	local tmux_path="$ROOT_DIR/.config/tmux"
-	test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" >>$INSTLOG 2>&1
-	cd "$tmux_path/oh-my-tmux" && git pull >>$INSTLOG 2>&1
+  local tmux_path="$ROOT_DIR/.config/tmux"
+  test -d "$tmux_path/oh-my-tmux" || git clone https://github.com/gpakosz/.tmux.git "$tmux_path/oh-my-tmux" >>$INSTLOG 2>&1
+  cd "$tmux_path/oh-my-tmux" && git pull >>$INSTLOG 2>&1
 
-	safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$tmux_path/tmux.conf"
-	safelink "$tmux_path" "$HOME/.config/tmux"
+  safelink "$tmux_path/oh-my-tmux/.tmux.conf" "$tmux_path/tmux.conf"
+  safelink "$tmux_path" "$HOME/.config/tmux"
 }
 
 nvim() {
-	test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" >>$INSTLOG 2>&1
-	cd "$HOME/.config/nvim" && git pull origin main >>$INSTLOG 2>&1
+  test -d "$HOME/.config/nvim" || git clone https://github.com/ted-vo/nvim.git "$HOME/.config/nvim" >>$INSTLOG 2>&1
+  cd "$HOME/.config/nvim" && git pull origin main >>$INSTLOG 2>&1
 }
 
 all() {
-	"$BIN_DIR/shells-for-work" install
+  "$BIN_DIR/shells-for-work" install
 
-	alacritty &
-	show_progress "${White}  alacritty" $!
+  zsh &
+  show_progress "${White}  ZSH config" $!
 
-	zsh &
-	show_progress "${White}  ZSH config" $!
+  gitconfig &
+  show_progress "${White}  gitconfig" $!
 
-	gitconfig &
-	show_progress "${White}  gitconfig" $!
+  tmux &
+  show_progress "${White}  oh-my-tmux" $!
 
-	tmux &
-	show_progress "${White}  oh-my-tmux" $!
-
-	nvim &
-	show_progress "${White}  neovim" $!
+  nvim &
+  show_progress "${White}  neovim" $!
 }
 
 main() {
-	case $1 in
-	zsh)
-		zsh &
-		show_progress "${White}  zsh" $!
-		exit
-		;;
-	alacritty)
-		alacritty &
-		show_progress "${White}  alacritty" $!
-		exit
-		;;
-	gitconfig)
-		gitconfig &
-		show_progress "${White}  gitconfig" $!
-		exit
-		;;
-	tmux)
-		tmux &
-		show_progress "${White}  oh-my-tmux" $!
-		exit
-		;;
-	nvim)
-		nvim &
-		show_progress "${White}  neovim" $!
-		exit
-		;;
-	all)
-		all
-		exit
-		;;
-	*)
-		echo -e "$CER Not support!"
-		exit
-		;;
-	esac
+  case $1 in
+  zsh)
+    zsh &
+    show_progress "${White}  zsh" $!
+    exit
+    ;;
+  gitconfig)
+    gitconfig &
+    show_progress "${White}  gitconfig" $!
+    exit
+    ;;
+  tmux)
+    tmux &
+    show_progress "${White}  oh-my-tmux" $!
+    exit
+    ;;
+  nvim)
+    nvim &
+    show_progress "${White}  neovim" $!
+    exit
+    ;;
+  all)
+    all
+    exit
+    ;;
+  *)
+    echo -e "$CER Not support!"
+    exit
+    ;;
+  esac
 }
 
 main "$@"

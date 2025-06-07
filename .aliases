@@ -24,3 +24,6 @@ alias docker-start='systemctl start docker.service'
 
 # yazi
 alias y=yazi
+
+# ssh-agent
+alias s-agent='eval `ssh-agent -s`'

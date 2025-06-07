@@ -80,16 +80,8 @@ esac
 # --- k8s functions
 . "$HOME/.dotfiles/.k8s"
 
-# --- ibus configure
-if $(which pacman &>/dev/null); then
-  export GTK_IM_MODULE=ibus
-  export QT_IM_MODULE=ibus
-  export QT4_IM_MODULE=ibus
-  export CLUTTER_IM_MODULE=ibus
-  export XMODIFIERS=@im=ibus
-  export GLFW_IM_MODULE=ibus
-  pgrep ibus-daemon &>/dev/null || ibus-daemon -dxr
-fi
+# --- ssh-agent
+pgrep ssh-agent &>/dev/null || eval `ssh-agent -s` &>/dev/null
 
 # --- GCLoud CLI & K8S -------------
 # The next line updates PATH for the Google Cloud SDK.
