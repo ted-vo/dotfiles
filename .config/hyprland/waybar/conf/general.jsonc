@@ -51,7 +51,7 @@
     ]
   },
   "pulseaudio": {
-    "format": "{icon} {volume}%",
+    "format": "{icon}  {volume}%",
     "tooltip": false,
     "format-muted": " Muted",
     "on-click": "~/.config/hyprland/waybar/scripts/volume --toggle",
@@ -122,7 +122,7 @@
   "disk": {
     "interval": 30,
     "format": "󰋊 {percentage_used}%",
-    "path": "/",
+    "path": "/home",
     "tooltip": true,
     "tooltip-format": "HDD - {used} used out of {total} on {path} ({percentage_used}%)",
     "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"

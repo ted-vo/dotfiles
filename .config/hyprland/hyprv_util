@@ -17,10 +17,10 @@ get_theme() {
 
 update_theme() {
   xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita$SWITCHTO"
-  xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark"
+  xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-$MODESTR"
 
   gsettings set org.gnome.desktop.interface gtk-theme "Adwaita$SWITCHTO"
-  gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+  gsettings set org.gnome.desktop.interface icon-theme "Papirus-$MODESTR"
 }
 
 get_ver() {
