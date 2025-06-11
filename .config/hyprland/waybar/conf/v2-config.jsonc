@@ -28,7 +28,7 @@
     "network",
     "bluetooth",
     "temperature",
-    "custom/power_profile",
+    "power-profiles-daemon",
     "battery",
     "backlight",
     "pulseaudio",

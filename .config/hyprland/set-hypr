@@ -44,19 +44,7 @@ prep_stage=(
   pipewire    # new low-level multimedia framework
   wireplumber # powerful session and policy manager for PipeWire
 
-  zsh # Shell
-  jq  # JSON
-
-  # tools
-  wget
-  unzip
-  fzf
-  rsync
-  tmux
-
-  # input method
-  ibus-deamon
-  ibus-bamboo
+  jq # JSON
 
   wl-clipboard
   cliphist
@@ -89,7 +77,6 @@ install_stage=(
   thunar                      # GUID file manager
   btop                        # Activities manager
   wlsunset                    # wayland sunset aka filter blue light
-  hyprland-qtutils            # Small bunch of utility application that hyprland might invoke. These are stuff like dialogs or popups
 
   google-chrome # Browser
   firefox       # Browser
@@ -110,6 +97,8 @@ install_stage=(
   file-roller            # archive manager
   starship               # allows to customize the shell prompt
   papirus-icon-theme
+
+  power-profiles-daemon
 
   adobe-source-han-sans-cn-fonts # chinese fonts
   ttf-jetbrains-mono-nerd        # Som nerd fonts for icons and overall look

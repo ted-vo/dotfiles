@@ -57,7 +57,7 @@ tooltip label {
 #custom-lock_screen,
 #custom-light_dark,
 #custom-power_btn,
-#custom-power_profile,
+#power-profiles-daemon,
 #custom-weather,
 #custom-myhyprv,
 #window,
@@ -113,7 +113,7 @@ tooltip label {
   padding-left: 5px;
 }
 
-#custom-power_profile {
+#power-profiles-daemon {
   color: #a6e3a1;
   border-left: 0px;
   border-right: 0px;
