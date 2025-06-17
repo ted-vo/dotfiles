@@ -14,7 +14,8 @@ shells=(
   rsync
   wget
   unzip
-  tmux
+  tmux # terminal session manager
+  pass # unix password manager
   zsh
 
   cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
