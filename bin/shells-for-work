@@ -11,20 +11,23 @@ source "$SCRIPT_DIR/installer"
 
 shells=(
   # required
+  tmux       # terminal session manager
+  pass       # unix password manager
+  zsh        # primary shell
+  yazi       # terminal ui file explorer
+  neovim     # primary text editor
+  lazygit    # git terminal ui
+  lazydocker # docker terminal ui
+  fzf        # fuzzy finder
+  jq         # json processor
+
+  # advance
+  unzip
   rsync
   wget
-  unzip
-  tmux # terminal session manager
-  pass # unix password manager
-  zsh
-  yazi
-  neovim
-
   cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
   duf       # Disk Usage/Free Utility
   ripgrep   # Recursively searchs directories
-  fzf       # fuzzy finder
-  jq        # json processor
   dog       # DNS lookup
   xh        # http requets tools written in Rust
   bat       # A cat(1) clone with syntax highlighting and Git integration
@@ -34,8 +37,6 @@ shells=(
   helm      # helm-chart cli
   hurl      # humman command-line tools runs HTTP requests definded in a simple plaint text format
   glow      # Markdown dicovery and preview in terminal
-  lazygit
-  lazydocker
 
   # utilities
   cmatrix
