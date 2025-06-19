@@ -37,6 +37,7 @@ install_software() {
 
 macos() {
   if ! which brew &>/dev/null; then
+    echo -en "$CNT - Now installing $1 ."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
     show_progress $!
 
