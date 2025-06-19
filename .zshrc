@@ -3,6 +3,9 @@ autoload -U +X bashcompinit && bashcompinit
 
 export PATH="/bin:/usr/local/bin:/usr/bin"
 
+# zprofile
+[[ -f $HOME/.zprofile ]] && . $HOME/.zprofile
+
 # ----- Pre ---------------------------------------------
 #
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
