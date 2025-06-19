@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$SCRIPT_DIR/colorized"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
@@ -15,8 +17,6 @@ else
 fi
 
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
-
-source "$SCRIPT_DIR/colorized"
 
 INSTLOG="install.log"
 
