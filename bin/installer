@@ -3,8 +3,17 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
+  echo -en "$CNT - Detected system MacOS"
   OS="osx"
+else
+  echo -en "$CNT - Detected system Linux"
+  if which yay >/dev/null; then
+    echo -en "$CNT - Distribution Arch"
+  else
+    echo -en "$CNT - Distribution Ubuntu"
+  fi
 fi
+
 ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
 source "$SCRIPT_DIR/colorized"
@@ -37,7 +46,7 @@ install_software() {
 
 macos() {
   if ! which brew &>/dev/null; then
-    echo -en "$CNT - Now installing $1 ."
+    echo -en "$CNT Brew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
     show_progress $!
 
