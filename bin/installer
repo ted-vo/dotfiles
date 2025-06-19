@@ -50,8 +50,8 @@ macos() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
     show_progress $!
 
-    echo "# homebrew" >>$HOME/.zshrc.local
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zshrc.local
+    echo "# homebrew" >>$HOME/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
     echo -e "$COK - Config brew path done."
   fi
