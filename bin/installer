@@ -54,7 +54,7 @@ macos() {
 
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    echo -e "\033[1A\e[K$COK Config brew path done."
+    echo -e "$COK Config brew path done."
   fi
 
   s=$1
@@ -71,10 +71,10 @@ macos() {
     brew install $s >>$INSTLOG 2>&1 &
     show_progress $!
     if brew list $s &>/dev/null; then
-      echo -e "\033[1A\e[K$COK - $s was installed."
+      echo -e "$COK - $s was installed."
     else
       # if this is hit then a package is missing, exit to review log
-      echo -e "\033[1A\e[K$CER - $s install had failed, please check the install.log"
+      echo -e "$CER - $s install had failed, please check the install.log"
       exit
     fi
 
@@ -92,10 +92,10 @@ ubuntu() {
     show_progress $!
     # test to make sure package installed
     if dpkg -Q $1 &>/dev/null; then
-      echo -e "\033[1A\e[K$COK - $1 was installed."
+      echo -e "$COK - $1 was installed."
     else
       # if this is hit then a package is missing, exit to review log
-      echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
+      echo -e "$CER - $1 install had failed, please check the install.log"
       exit
     fi
   fi
@@ -112,10 +112,10 @@ arch_linux() {
     show_progress $!
     # test to make sure package installed
     if yay -Q $1 &>/dev/null; then
-      echo -e "\033[1A\e[K$COK - $1 was installed."
+      echo -e "$COK - $1 was installed."
     else
       # if this is hit then a package is missing, exit to review log
-      echo -e "\033[1A\e[K$CER - $1 install had failed, please check the install.log"
+      echo -e "$CER - $1 install had failed, please check the install.log"
       exit
     fi
   fi
