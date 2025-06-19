@@ -47,13 +47,12 @@ install_software() {
 macos() {
   if ! which brew &>/dev/null; then
     echo -e "$CNT - Homebrew not found. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
+    show_progress $!
 
-    echo >>$HOME/.zshrc.local
+    echo "# homebrew" >>$HOME/.zshrc.local
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zshrc.local
-
     eval "$(/opt/homebrew/bin/brew shellenv)"
-
     echo -e "$COK - Config brew path done."
   fi
 
