@@ -60,7 +60,7 @@ macos() {
   s=$1
 
   # fix for cheat-bin not found in homebrew
-  if $s = "cheat-bin"; then
+  if [ "$s" == "cheat-bin" ]; then
     s="cheat"
   fi
 
