@@ -51,7 +51,8 @@ macos() {
 
     echo >>$HOME/.zprofile
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    . $HOME/.zprofile
 
     echo -e "\033[1A\e[K$COK Config brew path done."
   fi
