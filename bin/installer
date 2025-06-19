@@ -25,7 +25,7 @@ show_progress() {
     echo -n "."
     sleep 2
   done
-  echo -en "Done!\n"
+  echo -en "${Green}Done\n"
   sleep 2
 }
 
@@ -46,7 +46,7 @@ install_software() {
 
 macos() {
   if ! which brew &>/dev/null; then
-    echo -e "$CNT - Homebrew not found. Installing..."
+    echo -en "$CNT - Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
     show_progress $!
 
