@@ -21,8 +21,8 @@ ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 INSTLOG="install.log"
 
 show_progress() {
-  while ps | grep $1 &>/dev/null; do
-    echo -n ".$1"
+  while ps | grep $1 | grep -v grep &>/dev/null; do
+    echo -n "."
     sleep 2
   done
   echo -en "Done!\n"
@@ -69,8 +69,7 @@ macos() {
   else
     echo -en "$CNT - Now installing $1 ."
     brew install $s >>$INSTLOG 2>&1 &
-    PID=$!
-    show_progress $PID
+    show_progress $!
     if brew list $s &>/dev/null; then
       echo -e "$COK - $s was installed."
     else
