@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
-source "$BIN_DIR/colorized"
-source "$BIN_DIR/shell-progress/simple_progress.sh"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR=$HOME/.dotfiles
 BIN_DIR="$ROOT_DIR/bin"
+
+# shellcheck disable=SC1091
+source "$BIN_DIR/colorized"
+source "$BIN_DIR/shell-progress/simple_progress.sh"
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
