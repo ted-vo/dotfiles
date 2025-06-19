@@ -17,6 +17,7 @@ shells=(
   tmux # terminal session manager
   pass # unix password manager
   zsh
+  neovim
 
   cheat-bin # Cheat allows you to create and view interactive cheatsheets on the command-line
   duf       # Disk Usage/Free Utility
@@ -50,7 +51,7 @@ If you are worried about entering your password then you may want to review the 
 }
 
 install() {
-  echo -en "${White}  Required shells"
+  echo -e "${White}  Required shells"
   sudo_warning
   sudo touch /tmp/dotfiles.tmp
   for SHELL in ${shells[@]}; do

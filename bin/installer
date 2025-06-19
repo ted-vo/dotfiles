@@ -3,14 +3,14 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$OS" == "darwin" ]; then
-  echo -en "$CNT - Detected system MacOS"
+  echo -e "$CNT - Detected system MacOS"
   OS="osx"
 else
   echo -en "$CNT - Detected system Linux"
   if which yay >/dev/null; then
-    echo -en "$CNT - Distribution Arch"
+    echo -en ":: Distribution Arch\n"
   else
-    echo -en "$CNT - Distribution Ubuntu"
+    echo -en ":: Distribution Ubuntu\n"
   fi
 fi
 
@@ -22,7 +22,7 @@ INSTLOG="install.log"
 
 show_progress() {
   while ps | grep $1 &>/dev/null; do
-    echo -n "."
+    echo -n ".$1"
     sleep 2
   done
   echo -en "Done!\n"
@@ -46,7 +46,7 @@ install_software() {
 
 macos() {
   if ! which brew &>/dev/null; then
-    echo -e "$CNT Brew not found. Installing..."
+    echo -e "$CNT - Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     echo >>$HOME/.zshrc.local
@@ -54,7 +54,7 @@ macos() {
 
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    echo -e "$COK Config brew path done."
+    echo -e "$COK - Config brew path done."
   fi
 
   s=$1
@@ -69,7 +69,8 @@ macos() {
   else
     echo -en "$CNT - Now installing $1 ."
     brew install $s >>$INSTLOG 2>&1 &
-    show_progress $!
+    PID=$!
+    show_progress $PID
     if brew list $s &>/dev/null; then
       echo -e "$COK - $s was installed."
     else
