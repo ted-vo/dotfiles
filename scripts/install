@@ -62,6 +62,7 @@ zsh() {
   safelink "$ROOT_DIR/.zshrc" "$HOME/.zshrc"
 }
 
+# tired
 alacritty() {
   # local requires=(cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python)
   if [[ $OS == 'linux' ]] && ! which alacritty &>/dev/null; then

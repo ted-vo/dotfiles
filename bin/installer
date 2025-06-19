@@ -36,11 +36,21 @@ install_software() {
 }
 
 macos() {
+  if ! which brew &>/dev/null; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
+    show_progress $!
+
+    echo >>$HOME/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    echo -e "\033[1A\e[K$COK Config brew path done."
+  fi
+
   if brew list $1 &>/dev/null; then
     echo -e "$COK - $1 is already installed."
   else
     echo -en "$CNT - Now installing $1 ."
-    brew install $1
+    brew install $1 >>$INSTLOG 2>&1 &
     show_progress $!
     if brew list $1 &>/dev/null; then
       echo -e "\033[1A\e[K$COK - $1 was installed."
