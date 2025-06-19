@@ -50,7 +50,7 @@ If you are worried about entering your password then you may want to review the 
 }
 
 install() {
-  echo -e "${White}  shells"
+  echo -en "${White}  Required shells"
   sudo_warning
   sudo touch /tmp/dotfiles.tmp
   for SHELL in ${shells[@]}; do
