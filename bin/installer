@@ -47,7 +47,7 @@ install_software() {
 macos() {
   if ! which brew &>/dev/null; then
     echo -en "$CNT Brew not found. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
+    sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >>$INSTLOG 2>&1 &
     show_progress $!
 
     echo >>$HOME/.zprofile
