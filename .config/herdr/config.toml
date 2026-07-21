@@ -1,0 +1,32 @@
+onboarding = false
+
+[ui]
+show_agent_labels_on_pane_borders = true
+
+[keys]
+previous_tab = "alt+h"
+next_tab = "alt+l"
+
+[[keys.command]]
+key = "ctrl+h"
+type = "shell"
+command = "~/.config/herdr/pane-nav.sh left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "shell"
+command = "~/.config/herdr/pane-nav.sh down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "shell"
+command = "~/.config/herdr/pane-nav.sh up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "shell"
+command = "~/.config/herdr/pane-nav.sh right"
+description = "navigate right (vim/herdr)"

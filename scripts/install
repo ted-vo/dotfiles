@@ -108,6 +108,14 @@ nvim() {
   cd "$HOME/.config/nvim" && git pull origin main >>$INSTLOG 2>&1
 }
 
+herdr() {
+  # Link only the tracked files; the live dir also holds sockets, logs and
+  # session state that must not be symlinked out of the repo.
+  local herdr_path="$ROOT_DIR/.config/herdr"
+  safelink "$herdr_path/config.toml" "$HOME/.config/herdr/config.toml"
+  safelink "$herdr_path/pane-nav.sh" "$HOME/.config/herdr/pane-nav.sh"
+}
+
 all() {
   "$BIN_DIR/shells-for-work" install
 
@@ -122,6 +130,9 @@ all() {
 
   nvim &
   show_progress "${White}  neovim" $!
+
+  herdr &
+  show_progress "${White}  herdr" $!
 }
 
 main() {
@@ -144,6 +155,11 @@ main() {
   nvim)
     nvim &
     show_progress "${White}  neovim" $!
+    exit
+    ;;
+  herdr)
+    herdr &
+    show_progress "${White}  herdr" $!
     exit
     ;;
   all)
