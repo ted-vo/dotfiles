@@ -1,7 +1,8 @@
+fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
-export PATH="/bin:/usr/local/bin:/usr/bin"
+export PATH="/bin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin"
 
 # zprofile
 [[ -f $HOME/.zprofile ]] && . $HOME/.zprofile
@@ -56,6 +57,7 @@ alias vim=nvim
 alias lzg=lazygit
 alias lzd=lazydocker
 alias zshconfig="vim $HOME/.zshrc"
+alias zshreload="source $HOME/.zshrc"
 alias ohmyzsh="vim $HOME/.oh-my-zsh"
 alias dotfilesconf="vim $HOME/.dotfiles"
 
@@ -96,6 +98,8 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 zi snippet OMZP::kubectl
 zi snippet OMZP::kubectx
 
+export DEVELOP_TOOLS_HOME="$HOME/develop-tools"
+
 # --- .asdf ------------------------
 [ -f "$HOME/.asdf/asdf.sh" ] && . "$HOME/.asdf/asdf.sh"
 [ -f "$HOME/.asdf/completions/asdf.bash" ] && . "$HOME/.asdf/completions/asdf.bash"
@@ -126,8 +130,22 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # ---- Flutter ---------------------
-export FLUTTER_HOME="$HOME/.flutter"
+export FLUTTER_HOME="$HOME/develop-tools/flutter"
 export PATH="$FLUTTER_HOME/bin:$PATH:"
+
+# ---- Android ---------------------
+export ANDROID_HOME=$HOME/develop-tools/Android/sdk
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358
+export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/latest/bin"
 
 # --- local -------------------
 [ -f "$HOME/.zshrc.local" ] && source $HOME/.zshrc.local
+
+# Added by Antigravity
+export PATH="/Users/tedvo/.antigravity/antigravity/bin:$PATH"
+
+# opencode
+export PATH=/Users/tedvo/.opencode/bin:$PATH
+
+# dotnet
+export PATH="/opt/homebrew/opt/dotnet@8/libexec:$HOME/.dotnet/tools:$PATH" 

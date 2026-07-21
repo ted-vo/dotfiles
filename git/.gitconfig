@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
-  name = ted-vo
-  email = vtnhon.dk@gmail.com
+  name = nhonvt
+  email = nhonvt@vsol.vn
 
 [core]
 	excludesfile = ~/.gitignore.global
@@ -37,3 +37,26 @@
 [alias]
   # If you do `git git status`, this sorts out the duplicate
 	git = !exec git
+[safe]
+	directory = /Users/tedvo/data/workspaces/vsol/IPL/devops/github-actions/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/vsol/IPL/devops/github-actions/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/vsol/IPL/devops/github-actions/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/vsol/IPL/devops/github-actions/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge
+	directory = /Users/tedvo/data/workspaces/personal/github/actions-runner/_work/knowledge/knowledge

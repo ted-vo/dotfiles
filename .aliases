@@ -24,3 +24,8 @@ alias docker-start='systemctl start docker.service'
 
 # ssh-agent
 alias s-agent='eval `ssh-agent -s`'
+
+alias dcp='docker-compose'
+alias dcpb='docker-compose build'
+alias dcpu='docker-compose up'
+alias dcpd='docker-compose down'
